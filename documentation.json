@@ -1,1 +1,217 @@
-{"name":"Starter Kit","colors":{"light":{"brand":"#F97316"},"dark":{"brand":"#FDBA74"}},"navigation":{"tabs":[{"tab":"Documentation","icon":"book","groups":[{"group":"Start Here","icon":"rocket","pages":[{"title":"Introduction","path":"introduction","icon":"home"},{"title":"Quickstart","path":"quickstart","icon":"zap"},{"title":"Components","path":"components","icon":"code"}]},{"group":"Sentinel","icon":"shield","pages":[{"title":"Anwenderhandbuch","path":"sentinel-anwender","icon":"users"},{"title":"Entwicklerdokumentation","path":"sentinel-entwickler","icon":"code"}]},{"group":"Components","icon":"layers","pages":[{"title":"Images","path":"components/images","icon":"image"},{"title":"Cards","path":"components/cards","icon":"square"},{"title":"Code","path":"components/code","icon":"code"},{"title":"Callouts","path":"components/callouts","icon":"message-square"},{"title":"Steps","path":"components/steps","icon":"list-ordered"},{"title":"Tabs","path":"components/tabs","icon":"columns"}]}]},{"tab":"API Reference","icon":"code","groups":[{"group":"Overview","icon":"file-text","pages":[{"title":"Authentication","path":"authentication","icon":"lock"}]},{"group":"Sample Endpoints","openapi":"openapi.yaml"}]},{"tab":"Help Center","icon":"help-circle","pages":[{"title":"Help Center","path":"help-center","icon":"home"},{"group":"FAQs","icon":"help-circle","expandable":false,"pages":[{"title":"Documentation Source","path":"help-center/faq/getting-started"}]},{"group":"Troubleshooting","icon":"alert-triangle","expandable":false,"pages":[{"title":"Page Missing in Sidebar","path":"help-center/troubleshooting/install-error"}]},{"group":"Guides","icon":"book-open","expandable":false,"pages":[{"title":"Create Your First Page","path":"help-center/guides/setup-project"}]}]},{"tab":"Changelog","icon":"clock","pages":[{"title":"Changelog","path":"changelog","icon":"history"}]}]}}
+{
+  "name": "Starter Kit",
+  "colors": {
+    "light": {
+      "brand": "#F97316"
+    },
+    "dark": {
+      "brand": "#FDBA74"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "icon": "book",
+        "groups": [
+          {
+            "group": "Start Here",
+            "icon": "rocket",
+            "pages": [
+              {
+                "title": "Introduction",
+                "path": "introduction",
+                "icon": "home"
+              },
+              {
+                "title": "Quickstart",
+                "path": "quickstart",
+                "icon": "zap"
+              },
+              {
+                "title": "Components",
+                "path": "components",
+                "icon": "code"
+              }
+            ]
+          },
+          {
+            "group": "Sentinel",
+            "icon": "shield",
+            "pages": [
+              {
+                "title": "Anwenderhandbuch",
+                "path": "sentinel-anwender",
+                "icon": "users"
+              },
+              {
+                "title": "Entwicklerdokumentation",
+                "path": "sentinel-entwickler",
+                "icon": "code"
+              }
+            ]
+          },
+          {
+            "group": "Components",
+            "icon": "layers",
+            "pages": [
+              {
+                "title": "Images",
+                "path": "components/images",
+                "icon": "image"
+              },
+              {
+                "title": "Cards",
+                "path": "components/cards",
+                "icon": "square"
+              },
+              {
+                "title": "Code",
+                "path": "components/code",
+                "icon": "code"
+              },
+              {
+                "title": "Callouts",
+                "path": "components/callouts",
+                "icon": "message-square"
+              },
+              {
+                "title": "Steps",
+                "path": "components/steps",
+                "icon": "list-ordered"
+              },
+              {
+                "title": "Tabs",
+                "path": "components/tabs",
+                "icon": "columns"
+              },
+              {
+                "group": "Anwendungskomponenten",
+                "icon": "app-window",
+                "expandable": true,
+                "pages": [
+                  {
+                    "title": "admin-benutzerverwaltung",
+                    "path": "components/anwendungskomponenten/admin-benutzerverwaltung"
+                  },
+                  {
+                    "title": "assessments",
+                    "path": "components/anwendungskomponenten/assessments"
+                  },
+                  {
+                    "title": "dashboard",
+                    "path": "components/anwendungskomponenten/dashboard"
+                  },
+                  {
+                    "title": "hearings",
+                    "path": "components/anwendungskomponenten/hearings"
+                  },
+                  {
+                    "title": "login",
+                    "path": "components/anwendungskomponenten/login"
+                  },
+                  {
+                    "title": "organisationen",
+                    "path": "components/anwendungskomponenten/organisationen"
+                  },
+                  {
+                    "title": "personen",
+                    "path": "components/anwendungskomponenten/personen"
+                  },
+                  {
+                    "title": "schiffe",
+                    "path": "components/anwendungskomponenten/schiffe"
+                  },
+                  {
+                    "title": "suche",
+                    "path": "components/anwendungskomponenten/suche"
+                  },
+                  {
+                    "title": "vorfaelle-incidents",
+                    "path": "components/anwendungskomponenten/vorfaelle-incidents"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "icon": "code",
+        "groups": [
+          {
+            "group": "Overview",
+            "icon": "file-text",
+            "pages": [
+              {
+                "title": "Authentication",
+                "path": "authentication",
+                "icon": "lock"
+              }
+            ]
+          },
+          {
+            "group": "Sample Endpoints",
+            "openapi": "openapi.yaml"
+          }
+        ]
+      },
+      {
+        "tab": "Help Center",
+        "icon": "help-circle",
+        "pages": [
+          {
+            "title": "Help Center",
+            "path": "help-center",
+            "icon": "home"
+          },
+          {
+            "group": "FAQs",
+            "icon": "help-circle",
+            "expandable": false,
+            "pages": [
+              {
+                "title": "Documentation Source",
+                "path": "help-center/faq/getting-started"
+              }
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "icon": "alert-triangle",
+            "expandable": false,
+            "pages": [
+              {
+                "title": "Page Missing in Sidebar",
+                "path": "help-center/troubleshooting/install-error"
+              }
+            ]
+          },
+          {
+            "group": "Guides",
+            "icon": "book-open",
+            "expandable": false,
+            "pages": [
+              {
+                "title": "Create Your First Page",
+                "path": "help-center/guides/setup-project"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Changelog",
+        "icon": "clock",
+        "pages": [
+          {
+            "title": "Changelog",
+            "path": "changelog",
+            "icon": "history"
+          }
+        ]
+      }
+    ]
+  }
+}

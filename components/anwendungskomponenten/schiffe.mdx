@@ -1,0 +1,214 @@
+---
+title: Schiffe
+description: Verwalte Schiffe, ihre Bewegungen und technische Daten in Sentinel, einschließlich Verknüpfungen zu Personen, Organisationen und Vorfällen.
+---
+
+## Überblick
+
+Der Bereich Schiffe bündelt alle Informationen zu maritimen Objekten in Sentinel und verbindet sie mit Personen, Organisationen und Vorfällen. Du nutzt ihn sowohl für die operative Arbeit als Anwender als auch als Einstiegspunkt für Entwickler in die Schiffe-spezifische UI-Logik.
+
+Schiffe folgen demselben Grundmuster wie andere Stammdatenbereiche in Sentinel: Du siehst eine Liste, kannst neue Einträge anlegen, bestehende bearbeiten und mit anderen Entitäten verknüpfen.
+
+## Zweck und Datenmodell
+
+Schiffe dienen als zentrale Referenz für alle beweglichen Objekte auf See, die in Sentinel eine Rolle spielen, etwa im Kontext von Überwachungsereignissen oder Operationen.
+
+Typische Informationen, die du pro Schiff verwaltest:
+
+- Identität und Kennungen (z. B. Name, IMO, MMSI, Rufzeichen)
+- Technische Eckdaten (z. B. Schiffstyp, Tonnage, Baujahr)
+- Hersteller/Modell (über Stammdaten zu Herstellern und ggf. Modellreihen)
+- Bewegungen und Einsätze (z. B. registrierte Fahrten, Positionen, beteiligte Vorfälle)
+- Verknüpfungen zu Personen (z. B. Kapitän, Besatzung, Eigner)
+- Verknüpfungen zu Organisationen (z. B. Reedereien, Betreiber, Flaggenstaat)
+- Verknüpfungen zu Vorfällen (z. B. Kontrollen, Zwischenfälle, Operationen)
+
+<Callout kind="tip">
+
+Nutze Schiffe als **gemeinsame Referenz** für alle Module: Verknüpfe Vorfälle, Personen und Organisationen immer mit demselben Schiffseintrag, statt neue Duplikate anzulegen.
+
+</Callout>
+
+## Navigation und Oberflächenaufbau
+
+In der Sentinel-Anwenderoberfläche findest du Schiffe als eigenen Menüpunkt in der Navigation, analog zu Personen und Organisationen. Die Oberfläche besteht aus zwei zentralen Bereichen:
+
+### Listenansicht
+
+Die Listenansicht zeigt alle Schiffseinträge in tabellarischer Form. Typische Elemente:
+
+- **Filter und Suche** über Name, IMO/MMSI oder andere Kennungen
+- **Spalten** für zentrale Attribute (z. B. Name, Kennung, Typ, Betreiber)
+- **Aktionen** pro Zeile (Detailansicht öffnen, bearbeiten, ggf. archivieren)
+- **Schaltfläche Neuer Eintrag**, um ein weiteres Schiff anzulegen
+
+Wenn du einen Eintrag auswählst, öffnet sich die Detailansicht.
+
+### Detailansicht
+
+Die Detailseite eines Schiffs bündelt alle Informationen in thematischen Abschnitten, z. B.:
+
+- **Stammdaten**: Name, Kennungen, Schiffstyp, Flagge, Hersteller/Modell
+- **Technische Daten**: Maße, Tonnage, Baujahr, Antrieb
+- **Verknüpfungen**: zu Personen, Organisationen und Vorfällen
+- **Historie/Bewegungen**: dokumentierte Fahrten oder Einsätze
+
+In der Detailansicht bearbeitest du Felder direkt oder über eine separate Bearbeitungsmaske.
+
+## Typische Aufgaben für Anwender
+
+### Neues Schiff anlegen
+
+Nutze die folgenden Schritte, um einen vollständigen und wiederverwendbaren Schiffsdatensatz zu erstellen.
+
+<Steps>
+
+<Step title="Listenansicht öffnen" icon="folder">
+
+Öffne in der linken Navigation den Bereich **Ships**. Die Listenansicht zeigt dir alle bereits vorhandenen Schiffe.
+
+Überprüfe zuerst, ob das Schiff vielleicht schon existiert, indem du nach Name, IMO oder MMSI suchst.
+
+</Step>
+
+<Step title="Duplikate ausschließen" icon="search">
+
+Nutze die Suchfunktion und Filter, um nach dem Schiff zu suchen, das du anlegen möchtest.
+
+Achte insbesondere auf **eindeutige Kennungen** wie IMO-Nummer oder MMSI, um Doppler zu vermeiden.
+
+</Step>
+
+<Step title="Neuen Eintrag erstellen" icon="plus">
+
+Klicke auf **Neues Schiff** oder eine gleichwertige Schaltfläche, um die Erfassungsmaske zu öffnen.
+
+Fülle alle Pflichtfelder aus und ergänze so viele optionale Angaben wie verfügbar, insbesondere eindeutige Kennungen und den Betreiber.
+
+</Step>
+
+<Step title="Verknüpfungen zu Personen und Organisationen anlegen" icon="users">
+
+Scrolle zum Abschnitt **Verknüpfungen** und ordne dem Schiff relevante Entitäten zu:
+
+- Organisationen wie Reedereien, Betreiber oder Flaggenstaat
+- Personen wie Kapitän, Eigner oder andere Funktionsträger
+
+Verwende dabei nach Möglichkeit bestehende Personen- und Organisationseinträge statt neue anzulegen.
+
+</Step>
+
+<Step title="Speichern und prüfen" icon="check-circle">
+
+Speichere den neuen Eintrag. Du gelangst in der Regel zur Detailansicht des gerade angelegten Schiffs zurück.
+
+Prüfe dort, ob alle wichtigen Daten korrekt sind und die Verknüpfungen zu Personen, Organisationen und Vorfällen wie erwartet angezeigt werden.
+
+</Step>
+
+</Steps>
+
+<Callout kind="alert">
+
+Lege Schiffe **nur einmalig** an. Wenn du bei der Anlage feststellst, dass ein Eintrag bereits existiert, brich die Neuerfassung ab und ergänze stattdessen den bestehenden Datensatz.
+
+</Callout>
+
+### Schiff bearbeiten
+
+Bearbeite Schiffe, um Stammdaten zu korrigieren oder neue Informationen zu ergänzen:
+
+1. Öffne **Ships** in der Navigation und suche das betreffende Schiff.
+2. Wähle den Eintrag aus und klicke auf **Bearbeiten**.
+3. Aktualisiere die benötigten Felder, z. B. Betreiberwechsel, neue Funkrufzeichen oder zusätzliche technische Daten.
+4. Speichere die Änderungen und prüfe in der Detailansicht, ob verknüpfte Personen, Organisationen und Vorfälle weiterhin korrekt referenziert sind.
+
+<Callout kind="tip">
+
+Dokumentiere **Änderungen an Kennungen** (z. B. neues Rufzeichen) nach Möglichkeit in einem Notizfeld oder einem eigenen Historienabschnitt, damit die Entwicklung eines Schiffs nachvollziehbar bleibt.
+
+</Callout>
+
+### Schiff mit Organisation und Personen verknüpfen
+
+Verknüpfungen helfen dir, Beziehungen im System transparent zu machen.
+
+Typischer Ablauf:
+
+1. Öffne die **Detailansicht** des Schiffs.
+2. Wechsle zum Abschnitt **Organisationen** oder **Personen**.
+3. Füge eine bestehende Organisation oder Person hinzu, zum Beispiel als Reederei, Betreiber oder Kapitän.
+4. Wähle ggf. eine **Rolle** (z. B. Eigner, Besatzung, Kontrolleinheit), damit klar ist, in welchem Kontext die Verknüpfung besteht.
+5. Speichere die Verknüpfung und überprüfe, ob sie sowohl im Schiff als auch im verknüpften Datensatz sichtbar ist.
+
+## Hinweise zur Datenqualität
+
+Gute Schiffsdatensätze sind die Grundlage für saubere Auswertungen und zuverlässige Lagebilder. Achte daher auf:
+
+- **Eindeutige Kennungen**: Trage verfügbare, global eindeutige Kennungen wie IMO, MMSI oder andere offizielle Registrierungsnummern ein.
+- **Schreibweise des Namens**: Verwende die offizielle Schreibweise aus verlässlichen Quellen und dokumentiere alternative Schreibungen ggf. in einem separaten Feld.
+- **Hersteller und Modell**: Wenn das Schiff einem bekannten Hersteller oder Modell zugeordnet werden kann, verwende die vorhandenen Stammdaten im Adminbereich.
+- **Zeitliche Gültigkeit**: Wenn sich Betreiber, Flagge oder Name ändern, halte die Änderungen nachvollziehbar fest, statt alte Informationen einfach zu überschreiben.
+- **Verknüpfungskonsistenz**: Nutze vorhandene Personen- und Organisationsdatensätze, um Mehrfachanlagen zu vermeiden und Beziehungen konsistent darzustellen.
+
+<Callout kind="info">
+
+Je konsistenter du Kennungen, Hersteller-Referenzen und Verknüpfungen pflegst, desto besser funktionieren spätere Abfragen, Analysen und automatisierte Plausibilitätsprüfungen.
+
+</Callout>
+
+## Technische Umsetzung für Entwickler
+
+Für Entwickler ist der Schiffe-Bereich vor allem über die Seite `src/pages/ShipsPage.jsx` und die gemeinsame Infrastruktur von Sentinel relevant.
+
+### UI-Einstieg: ShipsPage.jsx
+
+Die Hauptseite für den Schiffe-Bereich liegt in der Regel unter:
+
+- `src/pages/ShipsPage.jsx`
+
+Dort findest du:
+
+- Die **Listenlogik** für Schiffe (Laden, Filtern, Selektieren)
+- Routing in die **Detail- und Bearbeitungsansichten**
+- Anbindung an übergreifende Komponenten, z. B. Layout, Navigationsleiste und Berechtigungsprüfungen
+
+Wenn du das Verhalten des Schiffe-Moduls anpassen möchtest, ist diese Datei dein erster Einstiegspunkt.
+
+### Datenzugriff: DataContext und Supabase
+
+Wie andere Bereiche in Sentinel nutzt auch der Schiffe-Bereich den gemeinsamen Datenzugriff:
+
+- **DataContext** stellt im Frontend zentrale Hooks und Provider bereit, über die du Schiffsdaten laden, anlegen, aktualisieren und verknüpfen kannst.
+- **Supabase** dient als Backend für Authentifizierung und Datenpersistenz.
+
+Typische Operationen rund um Schiffe laufen daher über:
+
+- Abfragen von Schiffslisten und Detaildatensätzen
+- Einfügen und Aktualisieren von Schiffszeilen in der entsprechenden Tabelle
+- Verknüpfen mit Personen, Organisationen und Vorfällen über relationale Tabellen
+
+<Callout kind="tip">
+
+Halte den Datenzugriff für Schiffe über **DataContext-Hooks** konsistent mit anderen Entitäten (z. B. Personen, Organisationen). Das erleichtert die Wiederverwendung von Komponenten und vereinfacht zukünftige Erweiterungen.
+
+</Callout>
+
+### Bezug zu Admin/Manufacturers und Role Images
+
+Der Schiffe-Bereich ist typischerweise mit weiteren Admin-Stammdaten verknüpft:
+
+- **Manufacturers**: Hersteller und ggf. Modellreihen, die du Schiffen zuordnest. Änderungen an Herstellern wirken sich auf alle referenzierten Schiffe aus.
+- **Role Images**: Rollen- oder Funktionsbilder, die du für Verknüpfungen (z. B. Kapitän, Betreiber, Eigner) nutzt.
+
+Wenn du das Datenmodell für Hersteller, Modelle oder Rollen anpasst, überprüfe:
+
+- ob `ShipsPage.jsx` oder die dazugehörigen Detailkomponenten auf diese Stammdaten referenzieren, und
+- ob die Verknüpfungslogik zu Personen und Organisationen weiterhin korrekt funktioniert.
+
+## Weiterführende Bereiche
+
+Für ein vollständiges Verständnis des Schiffe-Moduls helfen die allgemeinen Sentinel-Dokumentationen:
+
+- Anwenderperspektive: [Anwenderhandbuch](/sentinel-anwender)
+- Entwicklerperspektive: [Entwicklerdokumentation](/sentinel-entwickler)

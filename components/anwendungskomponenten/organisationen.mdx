@@ -1,0 +1,253 @@
+---
+title: Organisationen
+description: Verwalte Organisationen in Sentinel, pflege Profile und Beziehungen zu Personen, Schiffen und Vorfällen und binde die OrganizationsPage in den Code ein.
+---
+
+## Zweck der Organisations-Komponente
+
+Organisationen bündeln Informationen zu Firmen, Behörden, Gruppen oder Crews und verknüpfen sie mit Personen, Schiffen und Vorfällen. So erkennst du Zusammenhänge nicht mehr nur auf Einzelebene, sondern auf Ebene ganzer Strukturen.
+
+Der Bereich `Organizations` steht Anwendern in der Sentinel-Oberfläche zur Verfügung und ist für Entwickler als `OrganizationsPage.jsx` im Frontend-Code angebunden.
+
+<Callout kind="info">
+
+Organisationen sind zentrale Referenzobjekte: Du solltest sie konsistent pflegen und möglichst vermeiden, ein und dieselbe Organisation mehrfach mit leicht abweichenden Schreibweisen anzulegen.
+
+</Callout>
+
+## Aufbau in der Benutzeroberfläche
+
+Der Organisationsbereich folgt dem gleichen Grundmuster wie `Persons` und `Ships`: Navigationseintrag, Liste und Detailansicht.
+
+### Navigation und Listenansicht
+
+Über den Navigationspunkt `Organizations` öffnest du die Übersicht aller Organisationen.
+
+Typische Elemente der Liste:
+
+- **Filter/Suche** nach Name, Ort oder Typ der Organisation
+- **Button zum Anlegen** einer neuen Organisation (z. B. `New Organization` oder `Add`)
+- **Spalten** wie Name, Typ, Sitz, aktive/inaktive Kennzeichnung
+- **Aktionen** pro Zeile, z. B. `Edit` oder ein Kontextmenü für weitere Funktionen
+
+Die Listenansicht ist deine Eintrittsstelle, um schnell zu prüfen, ob eine Organisation bereits existiert und um bestehende Einträge zu bearbeiten.
+
+### Detailansicht und Register
+
+Die Detailansicht einer Organisation zeigt die Stammdaten und in der Regel mehrere Bereiche oder Registerkarten, zum Beispiel:
+
+- **Stammdaten**: Name, Kurzname, Typ (Firma, Behörde, Crew, Gruppe), Sitz, Ansprechpartner.
+- **Mitglieder**: zugeordnete Personen, Rollen der Personen in der Organisation.
+- **Assets**: zugeordnete Schiffe oder andere Ressourcen.
+- **Vorfälle**: Liste von Ereignissen/Vorfällen, bei denen die Organisation beteiligt ist oder erwähnt wird.
+- **Notizen/Anhänge**: Freitext, Dokumente, Bilder.
+
+Über die Detailansicht pflegst du nicht nur das Organisationsprofil, sondern auch die Beziehungen zu anderen Entitäten.
+
+<Callout kind="alert">
+
+Beziehungen zu Personen, Schiffen und Vorfällen sind oft analytisch entscheidend. Erzeuge keine "losen" Duplikate (z. B. eine Person ohne Zuordnung, obwohl die Organisation bekannt ist), sondern nutze konsequent die Verlinkungsfunktionen.
+
+</Callout>
+
+## Typische Aufgaben für Anwender
+
+### Organisation anlegen
+
+Nutze diese Funktion, wenn eine Organisation im System noch nicht existiert, aber in Meldungen, Vorfällen oder Personenbeziehungen benötigt wird.
+
+<Steps>
+
+<Step title="Organizations-Bereich öffnen" icon="home">
+
+Öffne in der linken Navigation den Eintrag `Organizations`.  
+Die Listenansicht zeigt alle vorhandenen Organisationen, optional gefiltert nach deinen letzten Einstellungen.
+
+</Step>
+
+<Step title="Vorhandensein prüfen" icon="search">
+
+Nutze die Such- oder Filterfunktion und prüfe, ob die Organisation bereits existiert.  
+Verwende unterschiedliche Schreibweisen (z. B. mit/ohne Abkürzung), um Dubletten zu vermeiden.
+
+</Step>
+
+<Step title="Neuen Eintrag anlegen" icon="plus">
+
+Klicke auf den Button zum Anlegen einer neuen Organisation (z. B. `New Organization`).  
+Das Formular für den neuen Eintrag öffnet sich mit leeren Feldern.
+
+</Step>
+
+<Step title="Stammdaten erfassen" icon="edit">
+
+Trage alle relevanten Stammdaten ein:
+
+- Vollständiger Name und ggf. Kurzname
+- Organisationstyp (z. B. Firma, Behörde, NGO, Crew)
+- Hauptsitz (Ort, Land)
+- Kontaktinformationen (Telefon, E-Mail, Webseite)
+- Interne Klassifikationen oder Tags, falls vorhanden
+
+Achte auf eine einheitliche Schreibweise, z. B. bei Orten und Ländercodes.
+
+</Step>
+
+<Step title="Speichern und Kontrollblick" icon="check-circle">
+
+Speichere den Eintrag.  
+Prüfe anschließend in der Detailansicht kurz, ob alle Pflichtfelder gefüllt sind und der Name korrekt erscheint.
+
+</Step>
+
+</Steps>
+
+Erfolgsindikator: Die neue Organisation erscheint in der Liste und ist in Auswahllisten (z. B. beim Erfassen von Vorfällen oder Personen) verfügbar.
+
+### Organisation bearbeiten
+
+Passe eine Organisation an, wenn sich Stammdaten ändern oder sich eine frühere Fehleingabe korrigieren lässt.
+
+- **Liste öffnen**: Navigiere zu `Organizations` und suche die betroffene Organisation.
+- **Bearbeitungsmodus starten**: Klicke beim passenden Eintrag auf `Edit`.
+- **Felder ändern**: Aktualisiere nur die notwendigen Felder (z. B. neuen Sitz, aktualisierte Kontaktdaten).
+- **Speichern**: Sichere die Änderungen und prüfe kurz, ob abhängige Informationen (z. B. Adressangaben in Berichten) weiterhin konsistent sind.
+
+<Callout kind="alert">
+
+Wenn deine Installation produktiv genutzt wird, können Änderungen an Stammdaten historische Auswertungen beeinflussen. Kläre vor strukturellen Änderungen (z. B. Umbenennung oder Zusammenführung) interne Prozesse und Verantwortlichkeiten.
+
+</Callout>
+
+### Mitglieder und Beziehungen pflegen
+
+Organisationen entfalten ihren Nutzen, wenn sie konsequent mit Personen, Schiffen und Vorfällen verknüpft sind.
+
+Typische Aktionen:
+
+- **Person als Mitglied zuordnen**:  
+  In der Organisations-Detailansicht im Abschnitt `Members` eine Person hinzufügen und Rolle/Funktion in der Organisation angeben (z. B. Kapitän, Ansprechpartner Sicherheit).
+- **Schiff zuweisen**:  
+  Unter `Assets` ein Schiff auswählen, das der Organisation gehört oder von ihr betrieben wird.
+- **Vorfälle verknüpfen**:  
+  Im Bereich `Incidents` Vorfälle hinzufügen, in denen die Organisation beteiligt war (als Betreiber, Auftraggeber, Ziel, etc.).
+
+<Callout kind="tip">
+
+Lege Rollen und Beziehungsarten möglichst konsistent fest (z. B. immer `Owner`, `Operator`, `Member`). Das erleichtert spätere Filter und Analysen erheblich.
+
+</Callout>
+
+## Rollen und Berechtigungen
+
+Nicht alle Anwender sollen Organisationen gleich verwalten dürfen. Typische Muster (konkrete Rollenbezeichnungen hängen von deiner Sentinel-Konfiguration ab):
+
+- **Leser/Rolle mit Leserechten**:  
+  Darf Organisationen anzeigen, aber weder Stammdaten noch Beziehungen ändern.
+- **Sachbearbeiter**:  
+  Darf neue Organisationen anlegen, bestehende bearbeiten und Beziehungen pflegen.
+- **Administrator**:  
+  Darf zusätzlich strukturelle Änderungen vornehmen, Dubletten bereinigen und ggf. Organisationen deaktivieren oder zusammenführen.
+
+<Callout kind="alert">
+
+Wenn du eine Aktion im Organizations-Bereich nicht durchführen kannst (z. B. Button ausgegraut oder Fehlermeldung), fehlt dir vermutlich die entsprechende Berechtigung. Wende dich in diesem Fall an den Systemadministrator statt Workarounds (z. B. neue, leicht abgewandelte Organisation) zu verwenden.
+
+</Callout>
+
+## Technischer Anschluss für Entwickler
+
+Für Entwickler ist der Organisationsbereich in der Regel als eigene Seite im Frontend implementiert und an den zentralen Datenkontext angebunden.
+
+### Dateistruktur und Routing
+
+Die Organisationsseite liegt typischerweise unter:
+
+- `src/pages/OrganizationsPage.jsx` – Hauptseite für Liste und Detail
+- Routing-Eintrag in `src/App.jsx` oder einer Router-Konfiguration, z. B. mit einem Pfad `/organizations`
+
+Damit erscheint der Bereich als eigener Menüpunkt in der Anwendung und ist direkt adressierbar.
+
+### Datenanbindung über DataContext und Supabase
+
+Die Seite greift auf denselben Datenkontext und Backend-Service zu wie andere Kernmodule:
+
+- **DataContext** stellt den gemeinsamen Zustand bereit (z. B. aktuell geladene Organisationen, Ladezustände, Fehler).
+- **Supabase** dient als Backend für CRUD-Operationen (Create, Read, Update, Delete).
+
+Typische Verantwortlichkeiten:
+
+- `OrganizationsPage.jsx`:
+  - Rendert Listen- und Detailkomponenten für Organisationen.
+  - Nutzt Hooks aus dem DataContext, z. B. `useData()` oder modul-spezifische Hooks.
+  - Triggert Ladevorgänge (z. B. beim ersten Öffnen der Seite oder beim Ändern von Filtern).
+- **DataContext**:
+  - Enthält Funktionen wie `loadOrganizations`, `createOrganization`, `updateOrganization`, `linkPersonToOrganization`.
+  - Kapselt die Supabase-Queries, damit die UI-Komponenten nicht direkt mit Supabase sprechen.
+- **Supabase-Schicht**:
+  - Implementiert Tabellenzugriffe, z. B. auf Tabellen `organizations`, `organization_members`, `organization_assets`, `incident_organizations`.
+
+<Callout kind="info">
+
+Halte alle Datenzugriffe zentral im DataContext oder in dedizierten Service-Modulen. Vermeide direkte Supabase-Queries in UI-Komponenten, damit du Berechtigungen, Caching und Fehlerbehandlung an einer Stelle kontrollierst.
+
+</Callout>
+
+### Typische Entwicklungsaufgaben
+
+Bei der Weiterentwicklung des Organisationsmoduls triffst du häufig auf diese Aufgaben:
+
+- **Neue Felder im Organisationsprofil hinzufügen**  
+  Ergänze Spalten in der Supabase-Tabelle, erweitere den DataContext um die neuen Felder und passe Formular- sowie Detailkomponenten an.
+
+- **Zusätzliche Beziehungsarten einführen**  
+  Füge neue Typen in den Verknüpfungstabellen (z. B. `relationship_type`) hinzu und erweitere UI-Auswahllisten, Validierung und Filterlogik.
+
+- **Filter und Sichten optimieren**  
+  Implementiere zusätzliche Filter (z. B. nach Typ oder Land) in der `OrganizationsPage` und mappe sie auf entsprechende Supabase-Queries im DataContext.
+
+## Best Practices für Datenqualität
+
+Gute Organisationsdaten sind die Basis für belastbare Auswertungen und Analysen.
+
+<Callout kind="tip">
+
+Definiere intern kurze Richtlinien zur Anlage von Organisationen:  
+Wie werden Namen geschrieben, welche Felder sind Pflicht, wann werden Organisationen zusammengeführt oder stillgelegt? Dokumentiere diese Regeln im Anwenderhandbuch und richte, falls verfügbar, Validierungen im Formular ein.
+
+</Callout>
+
+Empfehlungen:
+
+- Vermeide Dubletten durch konsequente Suche vor dem Anlegen.
+- Nutze strukturierte Felder (z. B. Land als Code, Typ als Auswahlfeld), keine Freitext-Verschlagwortung für Kernattribute.
+- Pflege Beziehungen, sobald eine Organisation in Vorfällen oder Personendaten vorkommt, statt sie später nachzutragen.
+- Überprüfe regelmäßig in Berichten, ob viele Organisationen nur ein einziges Mal auftauchen – das kann ein Indiz für unvollständige Beziehungen sein.
+
+## Weiterführende Seiten
+
+<Columns cols={2}>
+
+<Card
+  title="Anwenderhandbuch Sentinel"
+  href="/sentinel-anwender"
+  icon="users"
+  cta="Zu den Anwender-Guides"
+>
+
+Überblick über alle Anwenderfunktionen in Sentinel, inklusive Personen- und Schiffsverwaltung.
+
+</Card>
+
+<Card
+  title="Entwicklerdokumentation Sentinel"
+  href="/sentinel-entwickler"
+  icon="code"
+  cta="Technische Details öffnen"
+>
+
+Architektur, DataContext, Supabase-Anbindung und Muster für weitere Anwendungskomponenten.
+
+</Card>
+
+</Columns>

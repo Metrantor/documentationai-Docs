@@ -1,0 +1,285 @@
+---
+title: Vorfälle (Incidents)
+description: Verwalte Vorfälle als zentrale Ermittlungsakten in Sentinel, verknüpfe beteiligte Objekte und verstehe UI-Workflows sowie Entwickler-Hooks.
+---
+
+## Überblick
+
+Vorfälle sind in Sentinel die zentrale Ermittlungsakte: Sie bündeln Ereignisse, beteiligte Personen, Organisationen, Schiffe und Assessments in einem strukturierten Datensatz.
+
+Jeder Incident besitzt einen Status (etwa offen, in Bearbeitung, abgeschlossen) und kann mit weiteren Fachobjekten verknüpft sein, sodass Ermittlungsarbeit nachvollziehbar dokumentiert bleibt.
+
+<Callout kind="info">
+
+Incidents werden sowohl in der Anwenderoberfläche als auch im Code als `Incidents` bzw. `Incident` geführt. In der UI finden Sie eine Liste aller Vorfälle und Detailansichten, im Code vor allem `IncidentsListPage.jsx`, `IncidentPage.jsx` und `AssessmentPanel.jsx`.
+
+</Callout>
+
+## Anwendungsfälle und Zweck
+
+Vorfälle dienen in Sentinel vor allem dazu, Ermittlungs- und Prüfvorgänge konsistent abzubilden und nachverfolgbar zu machen.
+
+Typische Einsatzzwecke:
+
+- **Ermittlungsakte führen**: Beschreibung des Vorfalls, Zeit, Ort, Status, Priorität.
+- **Beteiligte verknüpfen**: Personen, Organisationen und Schiffe als Beteiligte oder Bezugselemente.
+- **Risiko- und Fachbewertung**: Hinterlegen von Assessments, z. B. Risiko- oder Relevanzbewertung.
+- **Arbeitsfortschritt steuern**: Statuswechsel und Bearbeiterzuordnung für den Incident.
+
+## Rollen und Berechtigungen
+
+Zugriff auf Incidents und deren Sichtbarkeit hängen von der Rolle im System ab. Die zentrale Logik liegt in der Liste und im Detail, typischerweise über rollenbasierte Filter.
+
+<Callout kind="tip">
+
+Citizens sehen laut Codeauswertung ausschließlich ihre eigenen Incidents. Ermittler- oder Admin-Rollen greifen auf erweiterte Sichten (z. B. alle Vorfälle, Statistiken, Filter) zu.
+
+</Callout>
+
+Für Anwender bedeutet das:
+
+- **Citizens**: Nur eigene Vorfälle sichtbar, eingeschränkte Filtermöglichkeiten, meist kein Vollzugriff auf alle verknüpften Objekte.
+- **Sachbearbeiter/Ermittler**: Zugriff auf einen größeren Vorfallbestand, inkl. Filter, Statistiken und Assessments.
+- **Administratoren**: Vollzugriff auf alle Incidents, inklusive Konfiguration von Workflows und ggf. Korrektur von Dateninkonsistenzen.
+
+Für Entwickler sollte klar sein, dass Filter- und Sichtbarkeitslogik nicht nur im Backend, sondern auch in den UI-Komponenten (`IncidentsListPage.jsx`, `IncidentPage.jsx`) umgesetzt wird.
+
+## Incident-Liste verstehen
+
+Die Incident-Liste bildet den Einstieg in die Arbeit mit Vorfällen. Sie basiert auf `src/pages/IncidentsListPage.jsx` und wird typischerweise über einen Pfad wie `/incidents` aufgerufen.
+
+Wesentliche Elemente der Liste:
+
+- **Filterleiste**: Filtern nach Status, Rolle, Verantwortlichem oder Zeitraum.
+- **Statistikbereich**: Kennzahlen zu offenen, abgeschlossenen oder kritischen Incidents (rollenabhängig).
+- **Tabellen- oder Kartenansicht**: Zeile pro Incident mit Kerninformationen (Titel, Status, letzter Bearbeitungszeitpunkt, zuständiger Bearbeiter).
+- **Aktionen pro Zeile**: Öffnen des Incident-Details, ggf. Schnellaktionen (z. B. Statuswechsel).
+
+<Callout kind="info">
+
+Citizens sehen in der Liste nur eigene Vorfälle. Prüfen Sie bei fehlenden Einträgen zunächst die Rolle des angemeldeten Benutzers und die Filtereinstellungen.
+
+</Callout>
+
+### Typische Aufgaben in der Incident-Liste
+
+- **Neuen Vorfall anlegen**
+- **Bestehenden Vorfall öffnen**
+- **Liste nach Status, Zeitraum oder Rolle filtern**
+- **Statistiken zur Arbeitslast oder Falllage prüfen**
+
+Die folgenden Abschnitte zeigen den Standard-Workflow für neue Vorfälle und für die Triage bestehender Incidents.
+
+## Neuen Vorfall anlegen
+
+Ein neuer Incident bildet den Ausgangspunkt für eine Ermittlungsakte. Erstellen Sie zunächst den Vorfall, bevor Sie Beteiligte und Assessments ergänzen.
+
+<Steps>
+  <Step title="Incident-Liste öffnen" icon="folder">
+
+  Öffnen Sie in der Sentinel-Oberfläche den Menüpunkt **Vorfälle**. In der Regel führt ein Link oder eine Navigation direkt zur Route `/incidents`.
+
+  </Step>
+
+  <Step title="Neuen Vorfall erstellen" icon="plus">
+
+  Klicken Sie in der Incident-Liste auf **Neu** oder **Vorfall anlegen**. Es öffnet sich ein Formular, in dem Sie Grunddaten wie Titel, Beschreibung, Datum/Uhrzeit des Ereignisses und einen ersten Status erfassen.
+
+  </Step>
+
+  <Step title="Beteiligte verknüpfen" icon="users">
+
+  Ergänzen Sie im Formular oder nach dem Speichern die beteiligten **Personen**, **Organisationen** oder **Schiffe**. Diese Verknüpfungen machen den Incident zur zentralen Akte, in der alle relevanten Objekte zusammenlaufen.
+
+  </Step>
+
+  <Step title="Speichern und Assessment vorbereiten" icon="check-circle">
+
+  Speichern Sie den Incident. Nach erfolgreichem Speichern öffnet sich die Detailansicht oder der Vorfall erscheint in der Liste. Ab diesem Zeitpunkt können Sie **Assessments** anlegen, um Risiko- oder Fachbewertungen zu dokumentieren.
+
+  </Step>
+</Steps>
+
+Ein neuer Vorfall gilt als erfolgreich angelegt, wenn:
+
+- Er in der Incident-Liste erscheint (ggf. mit aktivem Filter).
+- Die Detailseite des Incidents geladen werden kann.
+- Die verknüpften Personen/Organisationen/Schiffe in der Detailansicht sichtbar sind.
+
+## Incident-Detail und Triage
+
+Die Detailansicht eines Vorfalls wird über `src/pages/IncidentPage.jsx` gerendert, typischerweise unter einer Route wie `/incident/:id`.
+
+In der Incident-Detailseite finden Sie:
+
+- **Kopfdaten**: Titel, Beschreibung, Status, Priorität, Erstell- und Änderungszeitpunkte.
+- **Beteiligte**: Verknüpfte Personen, Organisationen und Schiffe, meist mit Links zu den jeweiligen Detailansichten.
+- **Assessments**: Eingebunden über `src/components/AssessmentPanel.jsx` zur Bewertung von Risiko, Plausibilität oder anderen Kriterien.
+- **Verlaufsdokumentation**: Kommentare, Protokolle oder Statuswechsel.
+
+### Incident triagieren
+
+Triage beschreibt die erste Bewertung und Strukturierung eines neuen oder eskalierten Incidents.
+
+<Steps>
+  <Step title="Incident öffnen" icon="folder">
+
+  Wählen Sie in der Incident-Liste den gewünschten Vorfall aus, um die Detailansicht zu öffnen. Prüfen Sie dabei, ob Filter oder Rollenbeschränkungen Ihnen den Zugriff erlauben.
+
+  </Step>
+
+  <Step title="Kerninformationen prüfen" icon="info">
+
+  Lesen Sie Titel, Beschreibung, Zeitpunkt und ersten Status. Ergänzen oder korrigieren Sie fehlende Angaben, damit der Incident vollständig und verständlich ist.
+
+  </Step>
+
+  <Step title="Beteiligte und Verknüpfungen ergänzen" icon="users">
+
+  Fügen Sie weitere beteiligte Personen, Organisationen oder Schiffe hinzu oder passen Sie bestehende Verknüpfungen an. Je vollständiger diese Verknüpfungen, desto aussagekräftiger sind spätere Auswertungen und Assessments.
+
+  </Step>
+
+  <Step title="Assessment im Panel erfassen" icon="bar-chart">
+
+  Öffnen Sie das **AssessmentPanel** in der Detailansicht und erfassen Sie eine erste Bewertung. Dies kann eine Risiko- oder Relevanzeinstufung sein, die den weiteren Bearbeitungsweg bestimmt.
+
+  </Step>
+
+  <Step title="Status aktualisieren" icon="check-circle">
+
+  Setzen Sie den Incident-Status entsprechend Ihrer Einschätzung, etwa auf **in Bearbeitung** oder **zur weiteren Prüfung**. Speichern Sie Ihre Änderungen, damit sie im Team sichtbar sind.
+
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+
+Halten Sie beim Triagieren den Datenstand konsistent: Ändern Sie Status, Beteiligte und Assessments immer zusammenhängend. Inkonsistente Kombinationen (z. B. abgeschlossener Vorfall ohne Assessment) erschweren spätere Analysen.
+
+</Callout>
+
+## Datenmodell und Verknüpfungen
+
+Ein Incident steht im Zentrum eines kleinen Graphen aus verknüpften Domänenobjekten.
+
+Typische Beziehungen:
+
+- **Incident → Person**: Betroffene, Beschuldigte, Zeugen oder sonstige Rollen.
+- **Incident → Organisation**: Unternehmen, Behörden oder andere beteiligte Institutionen.
+- **Incident → Schiff**: Relevante Schiffe, etwa bei maritimen Vorfällen.
+- **Incident → Assessment**: Fachliche und risikobezogene Bewertungen im `AssessmentPanel`.
+
+<Callout kind="info">
+
+Nutzen Sie die Verknüpfungen konsequent statt freier Textfelder, damit Such- und Filterfunktionen in der Incident-Liste verlässlich arbeiten und Assessments eindeutigen Vorfällen zugeordnet bleiben.
+
+</Callout>
+
+## Technischer Aufbau für Entwickler
+
+Aus Entwicklersicht bildet die Incident-Funktionalität ein Zusammenspiel mehrerer UI-Seiten und Kontext-Komponenten.
+
+<CodeGroup tabs="Dateiübersicht,Routing und Daten" show-lines={true}>
+```bash
+# Zentrale Dateien für Vorfälle
+src/pages/IncidentsListPage.jsx   # Übersicht und Filter für alle sichtbaren Incidents
+src/pages/IncidentPage.jsx        # Detailansicht eines einzelnen Incidents
+src/components/AssessmentPanel.jsx# Eingebettete Bewertung im Incident-Detail
+src/context/DataContext.jsx       # Geteilte Datenbasis und Laden von Incidents
+```
+
+```javascript
+// Typischer Ausschnitt: Routing und Datenanbindung (vereinfacht)
+
+import { Routes, Route } from "react-router-dom";
+import { DataProvider } from "./context/DataContext";
+import IncidentsListPage from "./pages/IncidentsListPage";
+import IncidentPage from "./pages/IncidentPage";
+
+export function App() {
+  return (
+    <DataProvider>
+      <Routes>
+        <Route path="/incidents" element={<IncidentsListPage />} />
+        <Route path="/incident/:id" element={<IncidentPage />} />
+      </Routes>
+    </DataProvider>
+  );
+}
+```
+</CodeGroup>
+
+### IncidentsListPage.jsx
+
+`IncidentsListPage.jsx` kümmert sich um:
+
+- Laden der für die aktuelle Rolle sichtbaren Incidents (über `DataContext` oder vergleichbare Hooks).
+- Anwenden von Filtern (Status, Zeitraum, Rolle, ggf. Suchbegriffe).
+- Anzeigen von Statistik-Komponenten, z. B. Anzahl offener Vorfälle.
+- Navigationslogik zur Detailansicht (`/incident/:id`).
+
+### IncidentPage.jsx und AssessmentPanel.jsx
+
+`IncidentPage.jsx` stellt die Detailansicht bereit und bindet `AssessmentPanel.jsx` ein:
+
+- Abholen des Incidents anhand der `id` aus der Route.
+- Darstellung von Stammdaten, beteiligten Objekten und Historie.
+- Einbindung von `AssessmentPanel` zur Bearbeitung der Bewertungen.
+- Speichern von Änderungen über den `DataContext` oder Serviceschichten.
+
+`AssessmentPanel.jsx` selbst ist meist generisch auslegbar:
+
+- Liest den aktuellen Incident oder dessen Bewertung aus dem `DataContext`.
+- Stellt Felder für Risiko- oder Fachbewertung bereit.
+- Persistiert Änderungen konsistent mit dem restlichen Incident.
+
+<Callout kind="tip">
+
+Achten Sie bei Erweiterungen darauf, dass `AssessmentPanel` und `IncidentPage` dieselbe Datenquelle (`DataContext`) verwenden. Mischen Sie nicht unterschiedliche State-Quellen, um Race-Conditions und Inkonsistenzen zu vermeiden.
+
+</Callout>
+
+## Beste Praktiken für Arbeit mit Incidents
+
+Für Anwender und Entwickler gelten einige gemeinsame Grundsätze im Umgang mit Vorfällen.
+
+Für Anwender:
+
+- Erfassen Sie **Incident-Grunddaten** so früh wie möglich, auch wenn noch nicht alle Details feststehen.
+- Verknüpfen Sie alle **relevanten Personen/Organisationen/Schiffe**, statt Informationen nur in Freitextfeldern abzulegen.
+- Pflegen Sie **Status und Assessments** aktuell, damit andere Rollen den Bearbeitungsstand verstehen.
+
+Für Entwickler:
+
+- Halten Sie rollenbasierte Filter in `IncidentsListPage.jsx` und `IncidentPage.jsx` konsistent.
+- Bündeln Sie Datenlogik für Incidents im `DataContext`, damit UI-Komponenten möglichst dünn bleiben.
+- Integrieren Sie neue Felder und Verknüpfungen so, dass sie sowohl in der Liste als auch im Detail sichtbar und filterbar werden.
+
+## Nächste Schritte
+
+Vertiefen Sie die Arbeit mit Sentinel und Incidents über folgende Seiten:
+
+<Columns cols={2}>
+  <Card
+    title="Anwenderhandbuch Sentinel"
+    href="/sentinel-anwender"
+    icon="users"
+    cta="Zu den Anwenderflows"
+  >
+
+  Lesen Sie, wie Vorfälle im Gesamtworkflow der Sentinel-Anwendung eingebettet sind und welche weiteren Komponenten beteiligt sind.
+
+  </Card>
+
+  <Card
+    title="Entwicklerdokumentation Sentinel"
+    href="/sentinel-entwickler"
+    icon="code"
+    cta="Technische Details ansehen"
+  >
+
+  Erfahren Sie mehr über Datenkontext, Routing und Architekturentscheidungen rund um Incidents und andere Anwendungskomponenten.
+
+  </Card>
+</Columns>

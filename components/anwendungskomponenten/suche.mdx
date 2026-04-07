@@ -1,0 +1,206 @@
+---
+title: Suche
+description: Nutze die globale und kontextsensitive Suche in Sentinel, um Datensätze schnell zu finden, zu filtern und als Entwickler in SearchPage und SpeedSearch anzubinden.
+---
+
+## Überblick
+
+Die Suchfunktion ermöglicht dir, Datensätze wie Personen, Organisationen, Schiffe und Vorfälle schnell zu finden – entweder global über alle Bereiche oder kontextsensitiv innerhalb einer Liste.
+
+Die Komponente ist sowohl für Anwender in der Oberfläche sichtbar als auch für Entwickler über dedizierte Komponenten wie `SearchPage` und `SpeedSearch` im Code nutzbar.
+
+## Sucharten in Sentinel
+
+Unterscheide bei der Arbeit mit der Suche zwischen zwei Hauptvarianten:
+
+- **Globale Suche**: durchsucht alle relevanten Datentypen und führt dich auf eine eigene Ergebnisseite.
+- **Listenbasierte Suche und Filter**: wirkt nur auf die aktuell geöffnete Liste, etwa eine Personen- oder Organisationsübersicht.
+
+### Globale Suche
+
+Die globale Suche bündelt alle Treffer auf einer eigenen Seite und eignet sich, wenn du nicht weißt, in welcher Liste sich ein Datensatz befindet.
+
+Typische Eigenschaften:
+
+- Erreichbar über einen zentralen Navigationspunkt oder ein prominent platziertes Suchfeld.
+- Ergebnisse sind gruppiert nach Typ, etwa Personen, Organisationen, Schiffe, Vorfälle.
+- Ein Klick auf einen Treffer öffnet direkt die Detailansicht des Datensatzes.
+
+### Suche in Listenansichten
+
+In Listenansichten suchst du gezielt innerhalb eines Datentyps, zum Beispiel nur innerhalb der Personenliste.
+
+Typische Eigenschaften:
+
+- Suchfeld oberhalb der Tabelle oder Liste.
+- Zusätzliche Filter nach Status, Datum oder Kategorie.
+- Ergebnisse werden direkt in der aktuellen Liste aktualisiert.
+
+<Callout kind="tip">
+
+Nutze die **Listen-Suche**, wenn du deine Datensätze bereits thematisch eingegrenzt hast, und die **globale Suche**, wenn du nur einen Namen, eine Kennung oder einen Teil der Information kennst.
+
+</Callout>
+
+## Workflow: Schnell einen Datensatz finden und öffnen
+
+Dieser Ablauf hilft dir, einen bestimmten Datensatz in wenigen Schritten zu finden und seine Details zu öffnen.
+
+<Steps>
+  <Step title="Globale Suche öffnen" icon="search">
+
+  Öffne die globale Suche über den Eintrag in der Hauptnavigation oder das zentrale Suchfeld in der Kopfzeile. Das Suchfeld ist in der Regel auf jeder Seite verfügbar und führt dich bei Bedarf zur Suchseite.
+
+  </Step>
+
+  <Step title="Suchbegriff eingeben" icon="terminal">
+
+  Gib einen Namen, eine Kennung oder ein markantes Attribut des gesuchten Datensatzes ein, zum Beispiel den Namen einer Person oder die IMO-Nummer eines Schiffs. Bestätige mit <kbd>Enter</kbd>, um die Suche auszuführen.
+
+  </Step>
+
+  <Step title="Treffer prüfen und öffnen" icon="arrow-right">
+
+  Prüfe die Trefferliste, die nach Datentypen gruppiert ist. Wähle den passenden Eintrag aus und öffne mit einem Klick die Detailansicht, um alle Informationen zum Datensatz zu sehen.
+
+  </Step>
+</Steps>
+
+## Workflow: Suche innerhalb einer Liste verfeinern
+
+Wenn du dich bereits in einer Liste befindest, ist die kontextsensitive Suche meist der schnellste Weg.
+
+<Steps>
+  <Step title="Zur passenden Liste wechseln" icon="folder">
+
+  Wechsle in der Navigation zu der Liste, in der du suchen möchtest – etwa Personen, Organisationen oder Schiffe. Die Listenansicht zeigt dir alle Datensätze dieses Typs.
+
+  </Step>
+
+  <Step title="Suchfeld und Filter verwenden" icon="search">
+
+  Nutze das Suchfeld oberhalb der Liste, um nach Namen, Kennungen oder anderen Schlüsselwörtern zu suchen. Ergänze bei Bedarf Filter wie Status, Zeitraum oder Kategorie, um die Ergebnismenge weiter einzugrenzen.
+
+  </Step>
+
+  <Step title="Treffer kontrollieren und auswählen" icon="check-circle">
+
+  Prüfe die gefilterte Liste und klicke auf den gewünschten Eintrag, um die Detailansicht zu öffnen. Wenn du keinen Treffer siehst, entferne einzelne Filter oder formuliere den Suchbegriff etwas allgemeiner.
+
+  </Step>
+</Steps>
+
+## Häufige Probleme und Lösungen
+
+### Keine Treffer, obwohl der Datensatz existiert
+
+Wenn du sicher bist, dass ein Datensatz existiert, aber keine Treffer angezeigt werden, gehe folgendermassen vor:
+
+- **Schreibweise prüfen**: Entferne Sonderzeichen oder versuche nur mit einem Teil des Namens zu suchen.
+- **Filter zurücksetzen**: Lösche gesetzte Filter in der Listenansicht, um die Ergebnismenge zu erweitern.
+- **Datentyp prüfen**: Wechsle gegebenenfalls in eine andere Liste oder nutze die globale Suche, falls du dich im falschen Bereich befindest.
+
+<Callout kind="info">
+
+Bestimmte Datensätze können nur angezeigt werden, wenn du die entsprechenden **Rollen und Berechtigungen** besitzt. Fehlen dir Rechte, erscheinen betroffene Einträge weder in der globalen Suche noch in Listen.
+
+</Callout>
+
+### Fehlende Berechtigung oder eingeschränkte Ergebnisse
+
+Wenn du weniger Treffer siehst als erwartet oder eine Detailansicht nicht öffnen kannst:
+
+- Melde dich mit einem Konto an, das die erforderliche Rolle für den betroffenen Bereich besitzt.
+- Frage bei deiner Administratorin oder deinem Administrator nach, ob dein Konto auf die entsprechenden Datentypen freigeschaltet ist.
+- Nutze, falls vorhanden, ein Test- oder Admin-Konto, um zu prüfen, ob das Problem an der Suche oder an deinen Rechten liegt.
+
+### Langsame Suche oder Performanceprobleme
+
+Wenn Suchvorgänge ungewöhnlich lange dauern oder die Ergebnisseite sehr verzögert reagiert:
+
+- Reduziere die Anzahl der gleichzeitig aktiven Filter.
+- Verkleinere den Zeitraum, falls du nach zeitbasierten Kriterien suchst.
+- Führe einen kürzeren, präziseren Suchbegriff aus und verfeinere erst danach.
+
+<Callout kind="alert">
+
+Wenn die Suche dauerhaft mehr als einige Sekunden pro Anfrage benötigt oder wiederholt Fehlermeldungen ausgibt, wende dich an das Betriebsteam. Sende dabei Datum, Uhrzeit, Suchbegriff und Informationen zur Seite, von der aus du gesucht hast.
+
+</Callout>
+
+## Entwickler: Implementierung der Suche
+
+Für Entwickler ist die Suchfunktion als eigene Seite und als wiederverwendbare Komponente implementiert. Die Logik für die globale Suche liegt zentral in einem Datenkontext.
+
+<CodeGroup tabs="SearchPage,SpeedSearch,Routing">
+
+```bash
+# Globale Suchseite
+src/pages/SearchPage.jsx
+```
+
+```bash
+# Schnellsuche-Komponente für Einbettung in andere Views
+src/components/SpeedSearch.jsx
+```
+
+```bash
+# Typische Route zur Suchseite
+src/App.jsx
+
+<Route path="/search" element={<SearchPage />} />
+```
+
+</CodeGroup>
+
+### SearchPage
+
+`SearchPage` stellt die globale Suche bereit und bindet die Suchlogik aus dem Datenkontext an.
+
+Typische Aufgaben der Seite:
+
+- Lesen des aktuellen Suchbegriffs (z. B. aus Query-Parametern oder einem lokalen State).
+- Aufruf der Funktion `globalSearch` aus dem DataContext.
+- Darstellung der Ergebnisse gruppiert nach Datentypen wie Personen, Organisationen, Schiffe und Vorfälle.
+- Navigation in die Detailansicht eines ausgewählten Datensatzes.
+
+### SpeedSearch
+
+Die Komponente `SpeedSearch` ermöglicht eine schnelle Suche innerhalb anderer Ansichten, etwa im Dashboard oder in Detailansichten.
+
+Nutze `SpeedSearch`, wenn du:
+
+- ein schlankes Suchfeld ohne eigene Ergebnisseite einbetten möchtest,
+- den Nutzerinnen und Nutzern eine direkte Suche im aktuellen Kontext bieten willst,
+- die gleiche Logik wie die globale Suche verwenden, aber die Darstellung an die Seite anpassen möchtest.
+
+### DataContext und globalSearch
+
+Die eigentliche Suchlogik ist im `DataContext` zentralisiert und wird von `SearchPage` und `SpeedSearch` wiederverwendet.
+
+- Die Funktion `globalSearch` führt die Suche über die registrierten Datensammlungen aus.
+- Sie berücksichtigt dabei Berechtigungen und liefert nur Datensätze zurück, auf die der aktuelle Benutzer Zugriff hat.
+- Änderungen an der Suchstrategie oder am Ranking nimmst du im DataContext vor, ohne die UI-Komponenten direkt anpassen zu müssen.
+
+<Callout kind="tip">
+
+Halte die `globalSearch`-Funktion **seiteneffizient**, indem du nur die Felder zurückgibst, die für die Ergebnisliste benötigt werden. Lade Detaildaten erst beim Öffnen eines konkreten Datensatzes.
+
+</Callout>
+
+## Zusammenfassung und nächste Schritte
+
+Nutze die globale Suche, wenn du schnell einen beliebigen Datensatz im System finden möchtest, und die Listen-Suche, um innerhalb eines Datentyps gezielt zu filtern. Entwickler binden dieselbe Logik über `SearchPage`, `SpeedSearch` und `globalSearch` im DataContext an.
+
+<Columns cols={2}>
+  <Card title="Anwenderhandbuch" href="/sentinel-anwender" icon="users" cta="Zu den Anwender-Workflows">
+
+  Erfahre mehr über Such- und Filtermöglichkeiten in den einzelnen Sentinel-Modulen.
+
+  </Card>
+  <Card title="Entwicklerdokumentation" href="/sentinel-entwickler" icon="code" cta="Technische Details lesen">
+
+  Vertiefe das Zusammenspiel von DataContext, Routing und Komponenten wie SearchPage und SpeedSearch.
+
+  </Card>
+</Columns>

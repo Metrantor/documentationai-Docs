@@ -1,0 +1,333 @@
+---
+title: Login
+description: Melden Sie sich in Sentinel an, verwalten Sie Sessions und verstehen Sie den Login-Flow, Rollen und die relevanten Code-Stellen für Entwickler.
+---
+
+## Zweck der Anmeldung in Sentinel
+
+Die Login-Funktion authentifiziert Anwender über Supabase, erstellt eine Session und leitet nach erfolgreicher Anmeldung auf das Dashboard bzw. die Übersichtsseite weiter. Entwickler binden diesen Flow über `LoginPage`, `AuthContext` und `ProtectedRoute` in die Anwendung ein.
+
+Nach dem Login bestimmen Rollen und Berechtigungen, auf welche Bereiche der Anwendung Sie zugreifen dürfen.
+
+<Callout kind="info">
+
+Die Authentifizierung basiert auf Supabase Auth. Nutzerkonten, Sessions und Passwort-Validierung laufen über Supabase; Rollen- und Routenlogik verwaltet der AuthContext in der Anwendung.
+
+</Callout>
+
+## Login-Flow für Anwender
+
+Dieser Abschnitt beschreibt den typischen Ablauf der Anmeldung aus Anwendersicht.
+
+<Steps>
+  <Step title="Login-Seite öffnen" icon="arrow-right">
+
+Navigieren Sie im Browser zur Sentinel-Login-Seite. In der Standardkonfiguration erreichen Sie diese über die Route `/login` (z. B. `https://sentinel.ihredomain.de/login`).
+
+Nach dem Laden der Seite sehen Sie ein Formular mit Feldern für E-Mail/Benutzername und Passwort sowie einen Button zur Anmeldung.
+
+  </Step>
+  <Step title="Zugangsdaten eingeben" icon="terminal">
+
+Tragen Sie Ihre registrierte E-Mail-Adresse (oder den vorgesehenen Benutzernamen) und Ihr Passwort in die entsprechenden Felder ein.
+
+Achten Sie auf korrekte Groß-/Kleinschreibung und überprüfen Sie die Eingabe, bevor Sie auf den Login-Button klicken.
+
+  </Step>
+  <Step title="Anmeldung auslösen" icon="play-circle">
+
+Klicken Sie auf den Button zur Anmeldung. Die Anwendung übermittelt Ihre Zugangsdaten an Supabase, prüft diese und erstellt bei Erfolg eine Session.
+
+Während der Prüfung zeigt die Oberfläche typischerweise einen Ladezustand (Spinner, deaktivierter Button), bis die Rückmeldung von Supabase erfolgt.
+
+  </Step>
+  <Step title="Weiterleitung zum Dashboard" icon="check-circle">
+
+Bei korrekter Anmeldung und gültigen Berechtigungen leitet Sentinel Sie automatisch auf das Dashboard bzw. die Hauptübersicht weiter.
+
+Ein erfolgreicher Login zeigt sich daran, dass Sie nicht mehr das Login-Formular, sondern Ihre persönliche Übersicht, Navigationsmenüs und ggf. Ihren Profilbereich sehen.
+
+  </Step>
+  <Step title="Logout ausführen" icon="x-circle">
+
+Um sich abzumelden, öffnen Sie den Profil- oder Nutzerbereich (z. B. Avatar oben rechts) und wählen Sie den Eintrag zum Logout.
+
+Die Anwendung löscht Ihre Session und leitet Sie auf die Login-Seite zurück. Ab diesem Zeitpunkt benötigen Sie für weitere Zugriffe einen erneuten Login.
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+
+Verwenden Sie Sentinel auf gemeinsam genutzten Geräten nur mit Logout nach jeder Sitzung. Schließen Sie zusätzlich den Browser, wenn Sie sicherstellen möchten, dass keine Session bestehen bleibt.
+
+</Callout>
+
+## Rollen und Berechtigungen nach dem Login
+
+Nach erfolgreichem Login steuert Sentinel den Zugriff auf Inhalte über Rollen und Berechtigungen, die im AuthContext basierend auf den Informationen von Supabase verwaltet werden.
+
+Typischer Ablauf:
+
+- Nach der Authentifizierung lädt der AuthContext die Benutzerinformationen (z. B. `user`, `role`).
+- Routen, die eine bestimmte Rolle erfordern, werden über `ProtectedRoute` geschützt.
+- Je nach Rolle sehen Anwender unterschiedliche Menüpunkte, Aktionen oder Datenansichten.
+
+<Callout kind="info">
+
+Wenn Sie sich zwar anmelden können, aber bestimmte Bereiche nicht sehen, liegt das meist an fehlenden Berechtigungen. Wenden Sie sich in diesem Fall an Ihren Administrator, damit er Ihre Rolle in Supabase bzw. im Sentinel-Rollenmodell anpasst.
+
+</Callout>
+
+## Typische Login-Probleme und Lösungen
+
+Dieser Abschnitt fasst häufige Fehlerfälle zusammen, die bei der Anmeldung oder während einer Session auftreten können.
+
+### Falsches Passwort oder unbekannte E-Mail
+
+**Symptom**
+
+- Beim Login erscheint eine Fehlermeldung wie „Benutzer oder Passwort ungültig“.
+- Sie bleiben auf der Login-Seite, die Eingabefelder werden ggf. geleert.
+
+**Mögliche Ursachen**
+
+- Tippfehler in E-Mail oder Passwort.
+- Das Konto existiert noch nicht oder wurde deaktiviert.
+
+**Lösung**
+
+- Prüfen Sie E-Mail-Adresse und Passwort sorgfältig, insbesondere Groß-/Kleinschreibung.
+- Nutzen Sie, sofern vorhanden, die „Passwort vergessen“-Funktion oder wenden Sie sich an den Support/Administrator, um Ihr Konto bzw. Passwort zurücksetzen zu lassen.
+
+### Keine Rolle oder unzureichende Berechtigungen
+
+**Symptom**
+
+- Login ist erfolgreich, aber Sie sehen nach dem Login nur eine leere Seite oder sehr wenige Menüpunkte.
+- Es erscheinen Fehlermeldungen beim Zugriff auf bestimmte Seiten, obwohl Sie eingeloggt sind.
+
+**Mögliche Ursachen**
+
+- Ihrem Benutzerkonto ist in Supabase keine oder die falsche Rolle zugewiesen.
+- Die Anwendung erwartet bestimmte Rollen (z. B. `admin`, `user`), erkennt Ihre Rolle aber nicht.
+
+**Lösung**
+
+- Notieren Sie, welche Bereiche Ihnen fehlen, und melden Sie dies Ihrem Administrator.
+- Administratoren sollten im Supabase-Backend oder in der Sentinel-Rollenverwaltung prüfen, ob die passende Rolle gesetzt ist und ob `ProtectedRoute` die Rolle korrekt interpretiert.
+
+### Session abgelaufen
+
+**Symptom**
+
+- Sie waren angemeldet, sehen aber nach einiger Zeit wieder die Login-Seite.
+- Aufruf einer geschützten Route führt plötzlich zurück zum Login, obwohl Sie nicht aktiv ausgeloggt haben.
+
+**Mögliche Ursachen**
+
+- Session- und Token-Laufzeit ist abgelaufen (Konfiguration in Supabase).
+- Token-Refresh ist fehlgeschlagen oder die Netzwerkverbindung war instabil.
+
+**Lösung**
+
+- Melden Sie sich erneut über die Login-Seite an.
+- Wenn das Problem sehr häufig auftritt, informieren Sie den Administrator, damit er die Token-Laufzeit und den Refresh-Mechanismus in Supabase bzw. im AuthContext prüfen kann.
+
+<Callout kind="alert">
+
+Wenn Sie den Verdacht haben, dass Ihr Konto von Unbefugten genutzt wird (z. B. unerwartete Logouts, unbekannte Aktivitäten), ändern Sie unmittelbar Ihr Passwort und informieren Sie Ihren Sicherheitsverantwortlichen.
+
+</Callout>
+
+## Logout und Sitzungsende
+
+Ein sauberer Logout ist wichtig, um Ihre Session zu beenden und unberechtigte Zugriffe zu verhindern.
+
+- Verwenden Sie immer die bereitgestellte Logout-Funktion im Profilbereich.
+- Ein aktiver Logout ruft im Hintergrund die Supabase-Logout-Funktion auf und entfernt Tokens/Session aus dem lokalen Zustand im AuthContext.
+- Bei Inaktivität kann die Session automatisch ablaufen; in diesem Fall behandelt die Anwendung Sie wie abgemeldet und leitet auf `/login` um.
+
+## Login-Implementierung für Entwickler
+
+Die folgende Übersicht zeigt, welche Code-Stellen an der Login-Funktion beteiligt sind und wie sie zusammenarbeiten.
+
+### Relevante Dateien und Orte
+
+<CodeGroup tabs="LoginPage.jsx,AuthContext.jsx,ProtectedRoute.jsx,App.jsx">
+
+```tsx
+// src/pages/LoginPage.jsx
+// Stellt das Login-Formular dar und triggert den Supabase-Login.
+
+import { useAuth } from "../context/AuthContext"
+
+export function LoginPage() {
+  const { signIn, isLoading, error } = useAuth()
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get("email")
+    const password = formData.get("password")
+
+    await signIn({ email, password })
+  }
+
+  return (
+    <main>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <input name="email" type="email" autoComplete="email" />
+        <input name="password" type="password" autoComplete="current-password" />
+        <button type="submit" disabled={isLoading}>Anmelden</button>
+        {error && <p>{error}</p>}
+      </form>
+    </main>
+  )
+}
+```
+
+```tsx
+// src/context/AuthContext.jsx
+// Verwaltet Supabase-Auth, User-Objekt, Rollen und Session-State.
+
+import { createContext, useContext, useEffect, useState } from "react"
+import { supabase } from "../lib/supabaseClient"
+
+const AuthContext = createContext(null)
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null)
+  const [role, setRole] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const session = supabase.auth.getSession()
+    // Setze user, role basierend auf Session/Claims
+    // ...
+    setIsLoading(false)
+  }, [])
+
+  async function signIn({ email, password }) {
+    setError(null)
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+
+    if (authError) {
+      setError(authError.message)
+      return
+    }
+
+    setUser(data.user)
+    // Rolle aus user.app_metadata oder einem Profil-Table lesen
+    // setRole(...)
+  }
+
+  async function signOut() {
+    await supabase.auth.signOut()
+    setUser(null)
+    setRole(null)
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, role, isLoading, error, signIn, signOut }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export function useAuth() {
+  return useContext(AuthContext)
+}
+```
+
+```tsx
+// src/components/ProtectedRoute.jsx
+// Schützt Routen vor unautorisiertem Zugriff.
+
+import { Navigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+
+export function ProtectedRoute({ children, requiredRole }) {
+  const { user, role, isLoading } = useAuth()
+
+  if (isLoading) {
+    return <div>Lade...</div>
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (requiredRole && role !== requiredRole) {
+    return <Navigate to="/unauthorized" replace />
+  }
+
+  return children
+}
+```
+
+```tsx
+// src/App.jsx
+// Bindet LoginPage und ProtectedRoute in das Routing ein.
+
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { AuthProvider } from "./context/AuthContext"
+import { LoginPage } from "./pages/LoginPage"
+import { DashboardPage } from "./pages/DashboardPage"
+import { ProtectedRoute } from "./components/ProtectedRoute"
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  )
+}
+```
+
+</CodeGroup>
+
+### Ablauf aus Entwicklersicht
+
+- `LoginPage` rendert das Formular und ruft `signIn` aus dem AuthContext auf.
+- `AuthContext` kapselt Supabase Auth (`signInWithPassword`, `signOut`, Session-Laden) und stellt `user`, `role` und Lade-/Fehlerzustände bereit.
+- `ProtectedRoute` liest `user` und `role` aus dem AuthContext und entscheidet, ob:
+  - die Zielkomponente gerendert,
+  - zur Login-Seite (`/login`) umgeleitet oder
+  - auf eine „Unauthorized“-Seite verwiesen wird.
+- `App.jsx` definiert die Route `/login` für die Login-Seite und schützt alle sensiblen Routen mit `ProtectedRoute`.
+
+<Callout kind="tip">
+
+Halten Sie alle Auth-bezogenen Aufrufe zentral im AuthContext und vermeiden Sie direkte Supabase-Logins quer über die Anwendung. So behalten Sie die Kontrolle über Rollen, Fehlerbehandlung und Session-Handling.
+
+</Callout>
+
+## Sicherheit und Best Practices
+
+- Verwenden Sie HTTPS in allen Umgebungen, damit Login-Daten verschlüsselt übertragen werden.
+- Lagern Sie Supabase-Schlüssel und -URLs in Umgebungsvariablen aus und checken Sie diese nicht in das Repository ein.
+- Protokollieren Sie keine Klartext-Passwörter oder vollständige Tokens.
+- Überwachen Sie fehlgeschlagene Login-Versuche zentral, um mögliche Angriffsversuche zu erkennen.
+
+## Nächste Schritte
+
+- Für Anwender: Lesen Sie das [Anwenderhandbuch](/sentinel-anwender), um zu sehen, was Sie nach dem Login im Dashboard tun können.
+- Für Entwickler: Vertiefen Sie die Details im Bereich [Entwicklerdokumentation](/sentinel-entwickler), insbesondere zu Rollenmodell und Routenaufbau.

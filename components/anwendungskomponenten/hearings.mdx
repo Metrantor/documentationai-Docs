@@ -1,0 +1,292 @@
+---
+title: Anhörungen (Hearings)
+description: Verwalte formelle Anhörungen in Sentinel, verknüpfe sie mit Vorfällen und Teilnehmern und erfasse zugehörige Zeugenaussagen inklusive technischer Umsetzung.
+---
+
+## Überblick
+
+Anhörungen (Hearings) bündeln alle Informationen zu einer formellen Anhörung: Datum, Ort, beteiligte Personen, zugeordnete Vorfälle und die daraus entstehenden Zeugenaussagen (Witness Statements).
+
+Im UI arbeitest du im Hearings-Bereich mit einer Übersichtsliste und Detailansichten; technisch liegen die Daten in Supabase-Tabellen wie `hearings_ms2024` und `witness_statements_ms2024`, auf die die `HearingsPage.jsx` über den DataContext zugreift.
+
+<Callout kind="info">
+
+Anhörungen sind immer mit mindestens einem Vorfall verknüpft. Zeugen­aussagen hängen anschließend an eine konkrete Anhörung, nicht direkt am Vorfall.
+
+</Callout>
+
+## Rollen und Berechtigungen
+
+Die genaue Rollenmatrix findest du im Anwenderhandbuch unter Sentinel, für Hearings gelten typischerweise:
+
+- **Judge / High Judge**  
+  - Hearings anlegen, bearbeiten, abschließen  
+  - Witness Statements einsehen und freigeben  
+  - Teilnehmerzuordnung verwalten
+- **Sentinel**  
+  - Hearings und Witness Statements einsehen  
+  - Entwürfe für Witness Statements anlegen (je nach Konfiguration)
+- **Weitere Rollen**  
+  - Lesen oder Bearbeiten je nach Projektkonfiguration und Richtlinien
+
+<Callout kind="alert">
+
+Wenn du kein neues Hearing anlegen oder Zeugen­aussagen bearbeiten kannst, fehlt dir wahrscheinlich die entsprechende Rolle oder Berechtigung. Wende dich in diesem Fall an die Systemverantwortlichen.
+
+</Callout>
+
+## Hearings im UI
+
+Der Hearings-Bereich besteht üblicherweise aus:
+
+- **Übersichtsliste** mit allen relevanten Hearings (Filter nach Status, Datum, Vorfall).
+- **Detailansicht** eines Hearings mit Kopfdaten (Datum, Ort, Status) und verknüpften Vorfällen.
+- **Teilnehmerbereich** mit Rollen wie Beschuldigter, Zeuge, Verteidigung, Anklage.
+- **Zeugen­aussagen-Sektion** mit allen Witness Statements zur Anhörung.
+
+Typische Aktionen:
+
+- Neues Hearing anlegen und einem oder mehreren Vorfällen zuordnen.
+- Teilnehmer hinzufügen oder Rollen anpassen.
+- Während oder nach der Anhörung Witness Statements erfassen, ergänzen oder freigeben.
+- Den Status des Hearings ändern, etwa von geplant zu abgeschlossen.
+
+## Hearing erstellen
+
+Dieser Workflow beschreibt den Standardfall, ein neues Hearing für einen oder mehrere vorhandene Vorfälle anzulegen.
+
+<Steps>
+
+<Step title="Hearings-Bereich öffnen" icon="folder">
+
+Öffne Sentinel und wechsle in der Navigation in den Bereich für Anhörungen. In der Übersicht siehst du alle geplanten, laufenden und abgeschlossenen Hearings.
+
+</Step>
+
+<Step title="Neues Hearing anlegen" icon="plus">
+
+Klicke auf **Neues Hearing** oder die entsprechende Aktion in der Toolbar. Sentinel öffnet ein Formular mit den Kopfdaten der Anhörung.
+
+</Step>
+
+<Step title="Metadaten erfassen" icon="edit">
+
+Trage die wichtigsten Eckdaten ein:
+
+- **Datum und Zeit** der Anhörung  
+- **Ort** oder virtuelles Setting  
+- **Status** wie geplant, laufend oder abgeschlossen (je nach Konfiguration)  
+- optional **interne Referenz** oder Aktenzeichen
+
+Nach dem Speichern erscheint das neue Hearing in der Übersicht mit Status geplant.
+
+</Step>
+
+<Step title="Vorfälle verknüpfen" icon="link">
+
+Ordne der Anhörung einen oder mehrere relevante Vorfälle zu. Nutze dafür die Such-/Auswahlfunktion im Abschnitt **Vorfälle** des Hearings.
+
+Erfolgreich verknüpfte Vorfälle erscheinen in der Detailansicht der Anhörung, oft mit Kurzbeschreibung und Kennung.
+
+</Step>
+
+<Step title="Teilnehmer hinzufügen und Rollen vergeben" icon="users">
+
+Füge nun alle relevanten Personen oder Organisationen hinzu und vergebe deren Rolle im Hearing, zum Beispiel:
+
+- Beschuldigter  
+- Zeuge  
+- Verteidigung / Rechtsbeistand  
+- Staatsanwaltschaft / Anklage  
+- Gericht (Judge / High Judge)
+
+Nach dem Speichern zeigt Sentinel die Teilnehmerliste mit zugeordneten Rollen und ggf. Kontaktdaten an.
+
+</Step>
+
+<Step title="Status des Hearings verwalten" icon="settings">
+
+Passe den Status an, sobald sich der Stand ändert, etwa von geplant zu laufend, wenn die Anhörung beginnt, und später zu abgeschlossen.
+
+Der aktuelle Status steuert in vielen Ansichten, ob das Hearing noch bearbeitbar ist und wie es in der Übersicht gefiltert wird.
+
+</Step>
+
+</Steps>
+
+<Callout kind="tip">
+
+Nutze konsistente Benennungen und Referenzen im Feld für Aktenzeichen oder interne IDs, damit du Hearings später über Suche und Filter schneller wiederfindest.
+
+</Callout>
+
+## Zeugenaussagen erfassen (Witness Statements)
+
+Witness Statements sind strukturierte Zeugen­aussagen, die immer an eine konkrete Anhörung gebunden sind.
+
+<Steps>
+
+<Step title="Hearing auswählen" icon="folder">
+
+Öffne die Hearings-Übersicht und wähle das Hearing, zu dem du eine Zeugenaussage dokumentieren möchtest. Die Detailansicht zeigt die bereits vorhandenen Statements im entsprechenden Abschnitt.
+
+</Step>
+
+<Step title="Neues Witness Statement anlegen" icon="plus">
+
+Klicke im Bereich **Zeugen­aussagen** auf **Neue Zeugenaussage**. Sentinel erstellt einen neuen Eintrag, meist zunächst im Status Entwurf.
+
+</Step>
+
+<Step title="Zeugen und Kontext zuordnen" icon="users">
+
+Wähle die Person aus der Teilnehmerliste des Hearings aus, für die die Aussage erfasst wird. Lege ggf. zusätzlich fest:
+
+- Rolle im Verfahren (z. B. Zeuge, Beschuldigter)  
+- Bezug zu einem bestimmten Vorfall innerhalb der Anhörung  
+- Zeitpunkt oder Reihenfolge der Aussage
+
+</Step>
+
+<Step title="Inhalt der Aussage dokumentieren" icon="edit">
+
+Erfasse den Inhalt der Aussage. Je nach Konfiguration stehen dir strukturierte Felder, ein freier Textbereich oder beides zur Verfügung. Ergänze bei Bedarf:
+
+- Hinweise zur Glaubwürdigkeit oder Widersprüchen  
+- Verweise auf Beweismittel  
+- Zusammenfassungen oder wörtliche Zitate
+
+</Step>
+
+<Step title="Sichtung und Freigabe" icon="check-circle">
+
+Lass die Aussage durch eine berechtigte Rolle (typischerweise Judge oder High Judge) prüfen. Ändere anschließend den Status des Witness Statements, etwa von Entwurf zu freigegeben.
+
+Nach der Freigabe bleibt die Aussage revisionssicher nachvollziehbar, spätere Änderungen werden entsprechend protokolliert (sofern konfiguriert).
+
+</Step>
+
+</Steps>
+
+<Callout kind="info">
+
+Du kannst für ein Hearing mehrere Witness Statements erfassen, etwa wenn mehrere Personen aussagen oder derselbe Zeuge mehrfach gehört wird. Die Übersicht im Hearing hilft dir, alle Aussagen einer Sitzung im Blick zu behalten.
+
+</Callout>
+
+## Technischer Überblick für Entwickler
+
+Die Hearings-Funktionalität ist in Sentinel typischerweise als eigene Seite umgesetzt, die über den DataContext auf Supabase zugreift.
+
+### HearingsPage und DataContext
+
+Die Datei `src/pages/HearingsPage.jsx` enthält die UI-Logik für die Hearings-Ansicht:
+
+- Aufbau der Übersicht und Detailansichten
+- Anstoßen von Create-, Update- und ggf. Delete-Operationen
+- Laden verknüpfter Daten wie Vorfälle, Teilnehmer und Witness Statements
+
+Der Datenzugriff erfolgt über den zentralen DataContext, der Supabase-Operationen kapselt, zum Beispiel:
+
+```javascript
+// stark vereinfachter Zugriff aus HearingsPage.jsx
+const { supabase } = useDataContext()
+
+const { data: hearings, error } = await supabase
+  .from("hearings_ms2024")
+  .select("id, reference, status, scheduled_at, location")
+  .order("scheduled_at", { ascending: true })
+```
+
+### Relevante Tabellen
+
+<Callout kind="info">
+
+Die genaue Tabellen- und Spaltenstruktur ist in der Sentinel-Entwicklerdokumentation beschrieben. Dieser Abschnitt dient als Orientierung für die Anwendungskomponente Hearings.
+
+</Callout>
+
+<CodeGroup tabs="hearings_ms2024,witness_statements_ms2024">
+
+```sql
+-- hearings_ms2024: Metadaten und Verknüpfung zu Vorfällen
+
+create table hearings_ms2024 (
+  id uuid primary key,
+  reference text,                -- internes Aktenzeichen / Referenz
+  status text,                   -- z. B. planned, ongoing, closed
+  scheduled_at timestamptz,      -- Datum/Uhrzeit der Anhörung
+  location text,                 -- Ort / virtuelle Sitzung
+  created_at timestamptz default now()
+  -- weitere Felder wie created_by, updated_at etc.
+);
+```
+
+```sql
+-- witness_statements_ms2024: Zeugenaussagen pro Hearing
+
+create table witness_statements_ms2024 (
+  id uuid primary key,
+  hearing_id uuid references hearings_ms2024(id),
+  participant_id uuid,           -- verweist auf Teilnehmer im Hearing
+  role text,                     -- Rolle im Hearing (z. B. witness)
+  content text,                  -- dokumentierte Aussage
+  status text,                   -- z. B. draft, approved
+  created_at timestamptz default now()
+  -- weitere Felder wie created_by, updated_at etc.
+);
+```
+
+</CodeGroup>
+
+Typische Datenzugriffe auf Witness Statements aus `HearingsPage.jsx` oder einem zugehörigen Hook sehen dann zum Beispiel so aus:
+
+```javascript
+const { data: statements, error } = await supabase
+  .from("witness_statements_ms2024")
+  .select("id, participant_id, role, content, status, created_at")
+  .eq("hearing_id", hearingId)
+  .order("created_at", { ascending: true })
+```
+
+## Zusammenspiel von Anwender- und Entwicklerperspektive
+
+Für Anwender stehen im Vordergrund:
+
+- Hearings vollständig und nachvollziehbar zu dokumentieren
+- Vorfälle, Teilnehmer und Witness Statements konsistent zu verknüpfen
+- Den Status von Anhörungen und Aussagen zu steuern
+
+Für Entwickler sind insbesondere wichtig:
+
+- Die Verwendung der korrekten Tabellen (`hearings_ms2024`, `witness_statements_ms2024`)
+- Saubere Kapselung des Datenzugriffs in DataContext und `HearingsPage.jsx`
+- Konsistente Statuswerte und Referenzen, damit Filter und Business-Logik im UI erwartungsgemäß funktionieren
+
+<Columns cols={2}>
+
+<Card
+  title="Anwenderhandbuch Sentinel"
+  href="/sentinel-anwender"
+  icon="book-open"
+  cta="Zu den Workflows"
+  horizontal="true"
+>
+
+Details zu Rollen, typischen Abläufen und UI-Elementen rund um Hearings.
+
+</Card>
+
+<Card
+  title="Entwicklerdokumentation Sentinel"
+  href="/sentinel-entwickler"
+  icon="code"
+  cta="Zu den Implementierungsdetails"
+  horizontal="true"
+>
+
+Technische Details zu Supabase, Tabellenstrukturen und DataContext-Architektur.
+
+</Card>
+
+</Columns>

@@ -1,0 +1,330 @@
+---
+title: Admin & Benutzerverwaltung
+description: Verwalte Benutzer, Rollen, Aktivstatus, Passwörter und Rollenbilder im Sentinel-Adminbereich und erfahre, wie Entwickler Berechtigungen technisch anbinden.
+---
+
+## Überblick: Adminbereich und Zuständigkeiten
+
+Der Adminbereich in Sentinel bündelt alle Funktionen, mit denen du Benutzerkonten, Rollen, Aktivstatus, Passwörter und Rollenbilder zentral verwaltest.
+
+<Callout kind="alert">
+
+Änderungen im Adminbereich wirken sich direkt auf Zugriffsrechte und Datenzugriff aus. Führe administrative Aktionen nur mit einem berechtigten Admin-Account aus und dokumentiere kritische Änderungen.
+
+</Callout>
+
+Admins steuern über die Benutzerverwaltung, welcher Personenkreis Zugriff auf Sentinel erhält und welche Bereiche eine Rolle sehen und bearbeiten darf. Entwickler sorgen dafür, dass diese Rollenmodelle in AuthContext, Routing und Supabase-Policies korrekt durchgesetzt werden.
+
+## Aufbau des Adminbereichs
+
+Der Adminbereich ist in mehrere Unterbereiche gegliedert, die über einen Admin-Menüpunkt erreichbar sind.
+
+<Tabs>
+  <Tab title="Users" icon="users">
+
+Der Bereich **Users** ist die zentrale Benutzerverwaltung. Hier legst du neue Accounts an, passt Rollen an, setzt Passwörter zurück und deaktivierst oder reaktivierst Benutzer.
+
+Typische Informationen pro Benutzer:
+
+- Name und Kontaktdaten
+- Login-Information (z. B. E-Mail)
+- Zugeordnete Rolle oder Rollen
+- Aktivstatus (aktiv / deaktiviert)
+- Metadaten je nach Implementierung (z. B. Hersteller-Bezug)
+
+  </Tab>
+  <Tab title="Role Images" icon="image">
+
+Im Bereich **Role Images** verwaltest du Rollenbilder, die mit Rollen verknüpft werden. Sie dienen als visuelle Repräsentation der Rollen (z. B. auf Dashboards oder Übersichtsseiten).
+
+Du kannst:
+
+- Neue Rollenbilder hochladen
+- Bestehende Bilder austauschen
+- Rollenzuordnungen aktualisieren oder entfernen
+
+  </Tab>
+  <Tab title="Manufacturers" icon="folder">
+
+Falls Sentinel mit **Hersteller- oder Mandantenbezug** arbeitet, findest du im Bereich **Manufacturers** Einstellungen, die Benutzer und Rollen an bestimmte Hersteller binden können.
+
+Typische Funktionen:
+
+- Hersteller anlegen und bearbeiten
+- Benutzer einem Hersteller zuordnen
+- Rollen und Berechtigungen pro Hersteller differenzieren
+
+  </Tab>
+</Tabs>
+
+## Typische Admin-Aufgaben in der Benutzerverwaltung
+
+### Benutzer anlegen und Rollen zuweisen
+
+Diese Schritte führen dich durch das Anlegen eines neuen Benutzers inklusive Rollenvergabe und Aktivierung.
+
+<Steps>
+  <Step title="Adminbereich öffnen" icon="settings">
+
+Öffne Sentinel und melde dich mit einem **Admin-Account** an. Navigiere über das Hauptmenü zum Menüpunkt **Admin** und wechsle in den Unterbereich **Users**.
+
+Erfolgssignal: Du siehst eine Liste vorhandener Benutzer mit Spalten für Name, Rolle und Aktivstatus.
+
+  </Step>
+
+  <Step title="Neuen Benutzer anlegen" icon="plus">
+
+Klicke auf **Neuen Benutzer anlegen** oder eine gleichwertige Aktion. Fülle die Pflichtfelder aus, typischerweise:
+
+- Name oder Anzeigename
+- E-Mail-Adresse oder Benutzername
+- Optional: Hersteller- oder Mandantenbezug
+- Optional: erste Passwort-Vergabe (je nach Implementierung)
+
+Erfolgssignal: Der neue Benutzer erscheint in der Liste mit einem initialen Status (z. B. aktiv, aber noch ohne Login-Aktivität).
+
+  </Step>
+
+  <Step title="Rollen zuweisen" icon="edit">
+
+Öffne den neuen Benutzer (z. B. über eine Detailansicht oder ein Kontextmenü) und wähle im Feld **Rolle** oder **Rollen** die passende Rolle aus dem verfügbaren Rollenmodell aus.
+
+Achte darauf, dass die gewählte Rolle vom Berechtigungskonzept gedeckt ist (z. B. `admin`, `editor`, `viewer`) und zu den Aufgaben des Nutzers passt.
+
+  </Step>
+
+  <Step title="Aktivstatus prüfen und speichern" icon="check-circle">
+
+Prüfe den **Aktivstatus** des Benutzers (z. B. Checkbox oder Schalter). Setze den Benutzer nur dann auf aktiv, wenn:
+
+- die E-Mail-Adresse verifiziert ist oder
+- der Onboarding-Prozess abgeschlossen wurde.
+
+Speichere deine Änderungen. Erfolgssignal: Die Benutzerliste zeigt den korrekten Aktivstatus und die zugewiesene Rolle an.
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+
+Arbeite bei größeren Änderungen (z. B. viele neue Benutzer) in kleinen Batches und notiere dir, welche Accounts du angelegt oder angepasst hast. So kannst du bei Support-Anfragen schneller nachvollziehen, was passiert ist.
+
+</Callout>
+
+### Rollen und Berechtigungen ändern
+
+Passen sich Aufgaben von Benutzerinnen und Benutzern an, musst du Rollen und ggf. Hersteller-Zuordnungen aktualisieren.
+
+<Steps>
+  <Step title="Benutzer auswählen" icon="users">
+
+Wechsle in den Bereich **Users** und wähle den betroffenen Benutzer aus der Liste, z. B. über eine Detailansicht oder ein Aktionen-Menü.
+
+Vergewissere dich anhand der Kontaktdaten, dass du den richtigen Account bearbeitest.
+
+  </Step>
+
+  <Step title="Rollen aktualisieren" icon="edit">
+
+Ändere die **Rolle** oder füge zusätzliche Rollen hinzu, je nachdem, wie euer Rollenmodell aufgebaut ist. Entferne Rollen, die nicht mehr benötigt werden, um übermäßige Berechtigungen zu vermeiden.
+
+Wenn Rollenherkunft oder -umfang unklar sind, kläre kurz mit der Entwicklung oder dem Sicherheitsverantwortlichen, bevor du die Änderung speicherst.
+
+  </Step>
+
+  <Step title="Account deaktivieren oder reaktivieren" icon="minus">
+
+Nutze den **Aktivstatus**, um Benutzer temporär oder dauerhaft zu sperren:
+
+- Setze den Status auf *inaktiv*, wenn ein Benutzer die Organisation verlässt oder Zugriffe aus Sicherheitsgründen pausiert werden müssen.
+- Reaktiviere nur, wenn der Bedarf klar ist und die Identität des Nutzers geprüft wurde.
+
+Erfolgssignal: Der Status in der Benutzerliste zeigt inaktiv oder aktiv an; betroffene Benutzer können sich entsprechend nicht mehr bzw. wieder anmelden.
+
+  </Step>
+</Steps>
+
+<Callout kind="info">
+
+Deaktivieren ist in der Regel besser als Löschen, da historische Aktivitäten so weiterhin nachvollziehbar bleiben. Prüfe mit Datenschutz und Compliance, wann ein vollständiges Löschen erforderlich ist.
+
+</Callout>
+
+### Passwörter setzen oder zurücksetzen
+
+Je nach Konfiguration vergibst du Passwörter direkt oder stoßt einen Reset-Prozess per E-Mail an.
+
+- **Direktes Setzen**: Du vergibst ein initiales Passwort und übermittelst es über einen sicheren Kanal (z. B. persönliches Gespräch, verschlüsselte Nachricht). Fordere die sofortige Änderung nach dem ersten Login an.
+- **Reset-Link**: Du löst einen Passwort-Reset aus, der einen zeitlich begrenzten Link an die hinterlegte E-Mail-Adresse sendet. Die Nutzer setzen das Passwort selbst.
+
+<Callout kind="alert">
+
+Übermittle Passwörter niemals unverschlüsselt per E-Mail oder Chat. Wenn du ausnahmsweise ein Passwort manuell vergibst, fordere den Benutzer ausdrücklich auf, es nach der ersten Anmeldung zu ändern.
+
+</Callout>
+
+## Rollenbilder (Role Images) verwalten
+
+Rollenbilder visualisieren Rollen und helfen, unterschiedliche Verantwortlichkeiten in der Oberfläche schneller zu erkennen.
+
+<Steps>
+  <Step title="Role Images Bereich öffnen" icon="image">
+
+Wechsle im Adminbereich in den Unterbereich **Role Images**. Du siehst eine Liste der vorhandenen Rollenbilder und ihre Zuordnung zu Rollen.
+
+Erfolgssignal: Jede Rolle, für die ein Bild konfiguriert ist, wird mit einem Vorschaubild dargestellt.
+
+  </Step>
+
+  <Step title="Neues Rollenbild hochladen" icon="upload">
+
+Starte den Upload-Prozess über **Neues Bild hochladen**. Wähle eine geeignete Datei (z. B. PNG oder JPEG) und achte auf:
+
+- Ausreichende Auflösung in den vorgesehenen UI-Größen
+- Einheitlichen Stil gegenüber anderen Rollenbildern
+- Keine sensiblen oder irreführenden Inhalte
+
+Weise das Bild nach dem Upload der gewünschten Rolle zu.
+
+  </Step>
+
+  <Step title="Rollenbild aktualisieren oder entfernen" icon="edit">
+
+Wenn sich das Rollenmodell ändert oder ein Bild nicht mehr passt, öffne den entsprechenden Eintrag und:
+
+- Tausche das Bild gegen eine neue Datei aus oder
+- Entferne die Zuordnung, wenn die Rolle kein spezielles Bild mehr benötigt.
+
+Überprüfe anschließend kurz in der Anwendung (z. B. Admin-Dashboard), ob das neue Bild korrekt erscheint.
+
+  </Step>
+</Steps>
+
+## Sicherheit und Berechtigungen
+
+Die Benutzerverwaltung ist ein sicherheitskritischer Bereich. Achte auf folgende Grundsätze:
+
+- **Prinzip der minimalen Rechte**: Vergib immer die kleinstmögliche Rolle, die für die Aufgabe ausreicht.
+- **Regelmäßige Überprüfung**: Kontrolliere periodisch, ob vergebene Rollen und aktive Accounts noch benötigt werden.
+- **On- und Offboarding-Prozesse**: Verknüpfe Benutzeranlagen und -deaktivierungen mit formalen HR-Prozessen.
+- **Auditierbarkeit**: Halte fest, wer Rollen ändert oder Accounts deaktiviert, falls eine spätere Nachverfolgung nötig ist.
+
+<Callout kind="info">
+
+Stimme dich mit der Entwicklung darüber ab, welche Rollen technisch existieren und welche Berechtigungen sie in Supabase, im Routing und im Frontend durchsetzen. Fachlich geplante Rollen und technisch umgesetzte Policies müssen übereinstimmen.
+
+</Callout>
+
+## Technische Implementierung für Entwickler
+
+Dieser Abschnitt richtet sich an Entwicklerinnen und Entwickler, die den Adminbereich und die Benutzerverwaltung erweitern oder anpassen.
+
+### Wichtige Code-Orte
+
+<CodeGroup tabs="AdminPage.jsx,UserManagementPage.jsx,RoleImageUpload.jsx,RoleImageManagement.jsx">
+
+```ts
+// src/pages/AdminPage.jsx
+// Zentrale Admin-Übersicht, Einstieg in Users, Role Images, Manufacturers
+
+export function AdminPage() {
+  // AuthContext stellt aktuelle Rolle bereit
+  // ProtectedRoute schützt den Zugang zur Admin-Oberfläche
+}
+```
+
+```ts
+// src/pages/UserManagementPage.jsx
+// Benutzerliste, Detailansichten, Rollen- und Aktivstatus-Verwaltung
+
+export function UserManagementPage() {
+  // Lädt Benutzer aus Supabase (z. B. Tabelle profiles oder users)
+  // Bietet Aktionen für Rolle ändern, Account deaktivieren, Passwort zurücksetzen
+}
+```
+
+```ts
+// src/components/RoleImageUpload.jsx
+// Upload-Komponente für neue Rollenbilder
+
+export function RoleImageUpload() {
+  // Nimmt Bilddatei entgegen, speichert im Supabase Storage
+  // Verknüpft Upload mit einer Rolle
+}
+```
+
+```ts
+// src/components/RoleImageManagement.jsx
+// Verwaltung bestehender Rollenbilder und Zuordnungen
+
+export function RoleImageManagement() {
+  // Listet Role Images
+  // Ermöglicht Austausch, Löschen und Neuzuordnung
+}
+```
+
+</CodeGroup>
+
+Nutze diese Dateien als Einstiegspunkte, wenn du UI-Flows, Validierungen oder Integrationslogik erweitern möchtest.
+
+### Authentifizierung, Rollen und geschützte Routen
+
+Rollen und Authentifizierung sind zentral im **AuthContext** und in geschützten Routen verankert:
+
+- **AuthContext** hält Informationen über den aktuell angemeldeten User und seine Rollen.
+- **ProtectedRoute** entscheidet anhand der Rolle, ob eine Route (z. B. Adminbereich) zugänglich ist.
+- UI-Komponenten im Adminbereich lesen Rolleninformationen aus dem Context, um Aktionen oder Menüpunkte ein- oder auszublenden.
+
+<Callout kind="alert">
+
+Wenn du neue Rollen einführst oder bestehende Rollen änderst, passe **AuthContext**, **ProtectedRoute** und alle Frontend-Prüfungen konsistent an. Inkonsistenzen führen schnell zu Situationen, in denen Benutzer zwar UI-Elemente sehen, aber wegen fehlender Backend-Berechtigungen Fehler erhalten.
+
+</Callout>
+
+### Supabase RLS und Policies
+
+Supabase setzt mit **Row Level Security (RLS)** und Policies durch, welche Daten eine Rolle lesen oder schreiben darf. Diese Policies müssen zum Rollenmodell im AuthContext und zu den Frontend-Routen passen.
+
+Typische Patterns:
+
+- Policies, die auf die Rolle im JWT oder im `profiles`-Eintrag prüfen
+- Einschränkung auf Hersteller- oder Mandanten-IDs
+- Trennung zwischen reinen Leserechten (Viewer) und Schreibrechten (Editor/Admin)
+
+<Callout kind="tip">
+
+Halte eine einfache Matrix bereit, welche Rolle welche Aktionen auf welchen Tabellen ausführen darf. Implementiere diese Matrix einmal in Supabase-Policies und im Frontend-Rollenkonzept und vermeide abweichende Sonderfälle.
+
+</Callout>
+
+## Best Practices für Erweiterungen
+
+Wenn du den Adminbereich weiterentwickelst, beachte folgende Punkte:
+
+- **Neue Rollen**: Ergänze sie an allen Stellen konsistent (AuthContext, ProtectedRoute, Supabase-Policies, UI).
+- **Neue Admin-Unterbereiche**: Hänge sie an die `AdminPage` an und schütze sie mit denselben Rollenchecks wie bestehende Tabs.
+- **Migrationssicherheit**: Teste Rollenänderungen immer zuerst mit Test-Accounts, bevor du produktive Admins oder Anwenderrollen umstellst.
+- **Logging**: Ergänze Server- oder Datenbank-Logging bei kritischen Aktionen wie Rollenwechseln oder Deaktivierungen.
+
+<Columns cols={2}>
+  <Card
+    title="Anwenderhandbuch: Adminbereich"
+    href="/sentinel-anwender"
+    icon="users"
+    cta="Zu den Anwender-Workflows"
+  >
+
+Vertiefte Beschreibung der Admin-Workflows aus Anwendersicht, inklusive Screenshots und typischer Use Cases.
+
+  </Card>
+  <Card
+    title="Entwicklerdokumentation Sentinel"
+    href="/sentinel-entwickler"
+    icon="code"
+    cta="Zur Entwicklerdoku"
+  >
+
+Details zur technischen Architektur, AuthContext, Routing, Supabase-Anbindung und Rollenmodell.
+
+  </Card>
+</Columns>

@@ -1,0 +1,218 @@
+---
+title: Dashboard
+description: Überblick über das Sentinel-Dashboard: Zweck, typische Aufgaben, Navigation in der UI und relevante Komponenten im Quellcode.
+---
+
+## Zweck des Dashboards
+
+Das Dashboard bietet dir nach dem Login einen zentralen Überblick über laufende Ermittlungen, aktuelle Aktivitäten und relevante Einstiegspunkte in Sentinel. Es dient als Startpunkt, um schnell zu wichtigen Bereichen wie Personen, Organisationen, Vorfällen und Bewertungen zu springen.
+
+Typische Inhalte auf dem Dashboard sind:
+
+- aggregierte Kennzahlen (z.B. Anzahl aktueller Ermittlungen),
+- Listen mit zuletzt geänderten oder zugewiesenen Vorgängen,
+- Schnellzugriffe auf häufig genutzte Bereiche.
+
+<Callout kind="info">
+
+Das konkrete Layout und die dargestellten Widgets können je nach Produktkonfiguration und Rolle leicht variieren. Die Grundfunktion bleibt jedoch: schneller Überblick und Navigation.
+
+</Callout>
+
+## Wo du das Dashboard in der UI findest
+
+Nach erfolgreichem Login landest du in der Regel direkt auf dem Dashboard. In der Hauptnavigation erscheint es als Eintrag **Dashboard** neben weiteren Bereichen wie Persons, Organizations, Ships, Incidents, Assessments, Hearings und Admin.
+
+Typische Orientierungspunkte:
+
+- **Navigation:** Dashboard steht meist ganz oben oder weit vorne in der linken Navigation.
+- **URL/Route:** Die Dashboard-Seite ist in der App als Startseite unter der Route `/` registriert, z.B. `https://sentinel.de/`.
+
+Wenn du von einer anderen Seite zurück zum Dashboard möchtest, klicke in der Navigation auf **Dashboard** oder nutze ggf. ein Logo/Branding-Element, das auf die Startseite verlinkt.
+
+## Typische Aufgaben auf dem Dashboard
+
+Auf dem Dashboard erledigst du vor allem drei Dinge: Überblick verschaffen, priorisieren und in Details abspringen.
+
+### Überblick über laufende Ermittlungen
+
+Nutze Kennzahlen und Übersichtslisten, um den aktuellen Arbeitsstand einzuschätzen:
+
+- Welche Fälle oder Incidents sind neu hinzugekommen?
+- Wo gab es kürzlich Änderungen oder Kommentare?
+- Welche Hearings oder Assessments stehen zeitnah an?
+
+### Schnellzugriff auf wichtige Bereiche
+
+Aus vielen Widgets kannst du direkt in Detailseiten abspringen:
+
+- Klick auf eine Person, Organisation oder ein Schiff, um direkt in den jeweiligen Datensatz zu springen.
+- Öffne einen Incident oder ein Assessment, um weitere Bearbeitungsschritte vorzunehmen.
+- Wechsle bei Bedarf vom Dashboard in die jeweilige Fachübersicht (z.B. Persons, Incidents), um zu filtern und zu suchen.
+
+### Aktuelle Aktivitäten und Aufgaben
+
+Im Bereich für aktuelle Aktivitäten findest du häufig:
+
+- zuletzt von dir oder deinem Team bearbeitete Vorgänge,
+- neu zugewiesene Aufgaben oder Fälle,
+- anstehende Termine (z.B. Hearings).
+
+Diese Bereiche helfen dir, deinen Tag zu priorisieren und nichts zu übersehen.
+
+## Rollen und Berechtigungen
+
+Welche Kacheln, Listen und Detailinformationen du auf dem Dashboard siehst, hängt von deiner Rolle und deinen Berechtigungen in Sentinel ab.
+
+<Callout kind="tip">
+
+Wenn du bestimmte Dashboard-Elemente erwartest, sie aber nicht siehst, prüfe zuerst deine Rolle mit dem Admin-Team. Häufig sind sensible Informationen (z.B. bestimmte Vorfälle oder Organisationen) nur für ausgewählte Rollen sichtbar.
+
+</Callout>
+
+Für Admins gelten oft erweiterte Sichten (z.B. Systemstatus, globale Statistiken), während operative Anwender fokusierte Ansichten auf ihre Ermittlungsfälle und Aufgaben sehen.
+
+## Typische Workflows mit dem Dashboard
+
+### Vom Login zum ersten Überblick
+
+<Steps>
+  <Step title="Einloggen" icon="lock">
+
+  Melde dich mit deinen Zugangsdaten in Sentinel an. Nach erfolgreichem Login wirst du automatisch auf das Dashboard oder eine zentrale Übersicht weitergeleitet.
+
+  </Step>
+
+  <Step title="Dashboard prüfen" icon="monitor">
+
+  Verschaffe dir einen Überblick über Kennzahlen und Listen: Gibt es neue Incidents, offene Aufgaben oder anstehende Hearings, die deine Aufmerksamkeit erfordern?
+
+  </Step>
+
+  <Step title="Prioritäten setzen" icon="check-circle">
+
+  Entscheide anhand der angezeigten Informationen, welche Fälle du zuerst bearbeitest. Nutze dazu insbesondere Listen mit neu zugewiesenen oder überfälligen Vorgängen.
+
+  </Step>
+</Steps>
+
+### Von der Übersicht in einen Datensatz springen
+
+<Steps>
+  <Step title="Relevanten Eintrag auf dem Dashboard finden" icon="search">
+
+  Suche auf dem Dashboard nach dem Eintrag, der für dich relevant ist, z.B. ein Incident mit hoher Priorität oder eine Person, deren Profil du prüfen möchtest.
+
+  </Step>
+
+  <Step title="Über Link in die Detailansicht wechseln" icon="arrow-right">
+
+  Klicke auf den verlinkten Namen oder die Referenznummer im Widget. Sentinel öffnet die zugehörige Detailseite im Bereich Persons, Organizations, Ships, Incidents oder einem anderen passenden Modul.
+
+  </Step>
+
+  <Step title="Zurück zum Dashboard" icon="home">
+
+  Wenn du deine Änderungen abgeschlossen hast, kehre über die Navigation mit einem Klick auf **Dashboard** zurück zur Übersicht, um den nächsten Vorgang auszuwählen.
+
+  </Step>
+</Steps>
+
+## Technischer Aufbau und Code-Orte
+
+Dieser Abschnitt richtet sich an Admins und Entwickler, die die Implementierung des Dashboards nachvollziehen oder erweitern möchten.
+
+<CodeGroup tabs="Route,Seite,Layout">
+
+```javascript
+// src/App.jsx (Auszug)
+import Dashboard from "./pages/Dashboard"
+import ProtectedRoute from "./components/ProtectedRoute"
+
+function App() {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      {/* weitere Routen */}
+    </Routes>
+  )
+}
+```
+
+```javascript
+// src/pages/Dashboard.jsx (Auszug)
+import Layout from "../components/Layout"
+
+export default function Dashboard() {
+  return (
+    <Layout title="Dashboard">
+      {/* Widgets, Kennzahlen, Listen */}
+    </Layout>
+  )
+}
+```
+
+```javascript
+// src/components/Layout.jsx (Auszug)
+export default function Layout({ title, children }) {
+  return (
+    <div className="app-layout">
+      {/* Navigation mit Dashboard, Persons, Organizations, ... */}
+      <main aria-label={title}>
+        {children}
+      </main>
+    </div>
+  )
+}
+```
+
+</CodeGroup>
+
+Relevante Stellen im Repository:
+
+- **Route-Registrierung:** `src/App.jsx` (Route `/` als Einstiegspunkt, meist mit `ProtectedRoute` und `AuthContext` abgesichert).
+- **Dashboard-Seite:** `src/pages/Dashboard.jsx` (Fachlogik, Datenlade-Mechanismen, Widgets, Kennzahlen).
+- **Gemeinsames Layout:** `src/components/Layout.jsx` (Navigation, Grundlayout, ggf. Kontext für Titel/Breadcrumbs).
+- **Zugriffssteuerung:** `src/components/ProtectedRoute.jsx` und `src/context/AuthContext.jsx` (steuern, welche Nutzer das Dashboard sehen und wie sie authentifiziert werden).
+
+<Callout kind="alert">
+
+Wenn du die Dashboard-Route, das Layout oder die Berechtigungslogik änderst, teste immer:
+1. frischen Login,
+2. Zugriff mit verschiedenen Rollen,
+3. Verhalten bei abgelaufenen Sessions oder fehlenden Rechten.
+
+</Callout>
+
+## Weiterführende Seiten
+
+<Columns cols={2}>
+  <Card
+    title="Sentinel Anwenderhandbuch"
+    href="/sentinel-anwender"
+    icon="users"
+    cta="Zur Übersicht"
+  >
+
+  Gesamtüberblick über Arbeitsbereiche, Navigation und typische Ermittlungs-Workflows in Sentinel.
+
+  </Card>
+
+  <Card
+    title="Sentinel Entwicklerdokumentation"
+    href="/sentinel-entwickler"
+    icon="code"
+    cta="Technische Details"
+  >
+
+  Architektur, Komponentenstruktur und Integrationspunkte der Sentinel-Anwendung.
+
+  </Card>
+</Columns>

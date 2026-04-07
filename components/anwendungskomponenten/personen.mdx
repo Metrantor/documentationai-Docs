@@ -1,0 +1,270 @@
+---
+title: Personen
+description: Verwalte Personen und Verdächtige in Sentinel, arbeite mit Profilen und Verknüpfungen und finde die relevanten Code-Stellen für die Umsetzung.
+---
+
+## Zweck und Einordnung
+
+Die Komponente Personen bildet alle Personen und Verdächtigen ab, die du in Sentinel erfasst, auswertest und mit anderen Objekten wie Organisationen, Schiffen oder Vorfällen verknüpfst.
+
+Du findest den Bereich in der linken Navigation als Eintrag Persons. Von dort aus öffnest du die Personenliste und gelangst in Detailansichten beziehungsweise Modale für einzelne Personen.
+
+<Callout kind="info">
+
+Die Personenverwaltung ist ein zentrales Element der Arbeit mit Sentinel: Viele Auswertungen, Trefferlisten und Verknüpfungen referenzieren Datensätze aus diesem Modul.
+
+</Callout>
+
+## Oberfläche: Listen- und Detailansicht
+
+Die Personen-Komponente besteht aus zwei Hauptansichten:
+
+- **Personenliste**: Tabellarische Übersicht aller erfassten Personen mit Such- und Filtermöglichkeiten.
+- **Detailansicht / Modal**: Formularansicht für eine ausgewählte Person mit allen erfassten Daten und Verknüpfungen.
+
+### Personenliste
+
+Über den Menüpunkt Persons öffnest du die Liste aller Personen und Verdächtigen.
+
+Typische Elemente der Liste:
+
+- **Suchfeld** für Namen, Aliasnamen, Dokumentennummern oder andere Identifikatoren.
+- **Filter** nach Status, Rolle (Person/Verdächtiger), Herkunft oder anderen Merkmalen.
+- **Spalten** für Kerndaten wie Name, Geburtsdatum, Staatsangehörigkeit, aktuelle Relevanz.
+- **Aktionen** pro Zeile, zum Beispiel Details öffnen, bearbeiten, mit Organisation/Schiff/Vorfall verknüpfen.
+
+Ein Klick auf einen Listeneintrag öffnet die Detailansicht beziehungsweise ein Modal mit dem vollständigen Profil.
+
+### Detailansicht und Modal
+
+Die Detailansicht (typischerweise als Modal implementiert) zeigt alle Informationen zu einer Person:
+
+- **Stammdaten**: Name, Geburtsdaten, Identitätsdokumente, Staatsangehörigkeit.
+- **Rollen und Einstufungen**: Verdächtiger, Zeuge, Crew-Mitglied, Kontaktperson und ähnliche Rollen.
+- **Verknüpfungen**: Zugeordnete Organisationen, Schiffe, Vorfälle, Dokumente oder Hinweise.
+- **Historie**: Änderungen, Ergänzungen und frühere Bewertungen, sofern implementiert.
+
+<Callout kind="tip">
+
+Achte bei der Bearbeitung immer auf die Vollständigkeit der Stammdaten und Verknüpfungen: Viele Auswertungen (z. B. Treffer- und Netzwerk-Analysen) hängen direkt von der Datenqualität im Personenmodul ab.
+
+</Callout>
+
+## Typische Aufgaben für Anwender
+
+Im Alltag arbeitest du vor allem mit vier Aufgaben: Personen anlegen, suchen, bearbeiten und verknüpfen.
+
+### Neue Person anlegen
+
+Nutze diesen Ablauf, um einen neuen Datensatz für eine Person oder einen Verdächtigen zu erfassen.
+
+<Steps>
+  <Step title="Personenliste öffnen" icon="users">
+
+  - Klicke in der linken Navigation auf den Eintrag Persons.
+  - Warte, bis die Personenliste geladen ist.
+  - Prüfe, ob die Liste alle vorhandenen Personen anzeigt und die Suche verfügbar ist.
+
+  </Step>
+
+  <Step title="Erfassungsmaske öffnen" icon="plus">
+
+  - Nutze die Schaltfläche zum Anlegen einer neuen Person, zum Beispiel New oder Add person.
+  - Sentinel öffnet ein leeres Formular beziehungsweise ein PersonDetailModal.
+  - Der Fokus liegt auf dem ersten Pflichtfeld der Stammdaten.
+
+  </Step>
+
+  <Step title="Daten eingeben" icon="edit">
+
+  - Trage die bekannten Stammdaten ein: vollständiger Name, bekannte Aliasnamen, Geburtsdatum, Staatsangehörigkeit.
+  - Füge, falls vorhanden, Identitätsdokumente (Passnummer, Ausweisnummer), Kontaktinformationen und Rollen hinzu.
+  - Verknüpfe bereits jetzt bekannte Organisationen, Schiffe oder Vorfälle, sofern sie in Sentinel vorhanden sind.
+
+  </Step>
+
+  <Step title="Speichern und prüfen" icon="check-circle">
+
+  - Speichere den Eintrag über die Speichern-Schaltfläche im Formular.
+  - Warte auf die Bestätigung (zum Beispiel Schließen des Modals oder Statusmeldung).
+  - Prüfe, ob der neue Eintrag in der Personenliste sichtbar ist und die wichtigsten Felder korrekt erscheinen.
+
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+
+Vermeide Dubletten: Nutze vor dem Anlegen die Suche in der Personenliste, um sicherzustellen, dass die Person nicht bereits erfasst wurde. Dubletten erschweren Auswertungen und Verknüpfungen.
+
+</Callout>
+
+### Personen suchen und filtern
+
+Um eine bestehende Person zu finden:
+
+- **Nutze das Suchfeld** in der Personenliste und gib Namen, Aliasnamen oder Identitätsnummern ein.
+- **Kombiniere Filter**, wenn du viele Treffer erhältst, etwa nach Staatsangehörigkeit, Rolle oder Relevanz.
+- **Sortiere die Liste**, etwa nach Aktualität oder Name, um Treffer schneller zu bewerten.
+
+Wenn du die gesuchte Person gefunden hast, öffne über den Eintrag die Detailansicht, um Daten zu prüfen oder zu ergänzen.
+
+### Personendaten bearbeiten
+
+Du bearbeitest Personendaten in der Detailansicht beziehungsweise im Modal:
+
+- Öffne den Eintrag aus der Personenliste.
+- Passe Stammdaten an, wenn sich Informationen geändert haben oder Fehler entdeckt wurden.
+- Ergänze neue Aliasnamen, Dokumente oder Bewertungen.
+- Speichere die Änderungen und prüfe, ob die aktualisierten Daten korrekt in der Liste und in verknüpften Ansichten erscheinen.
+
+Konzentriere dich bei Änderungen auf Nachvollziehbarkeit: Ergänze lieber ein neues Dokument oder eine neue Rolle, als bestehende Informationen ohne Dokumentation zu überschreiben.
+
+### Verknüpfungen zu Organisationen, Schiffen und Vorfällen
+
+Verknüpfungen stellen den Kontext einer Person her:
+
+- **Organisation**: Zugehörigkeit zu Unternehmen, Netzwerken oder Gruppierungen.
+- **Schiff**: Crew-Mitglied, Passagier oder sonstige Verbindung zu einem Schiff.
+- **Vorfall**: Beteiligung an einem konkreten Vorfall oder Ereignis.
+
+Typische Arbeitsweise:
+
+- Öffne die Person in der Detailansicht.
+- Nutze den Abschnitt für Links, Relations oder Associations.
+- Füge eine bestehende Organisation, ein Schiff oder einen Vorfall hinzu, indem du den jeweiligen Suchdialog nutzt.
+- Speichere die Verknüpfung und prüfe, ob sie sowohl in der Person als auch in der Gegenansicht (Organisation, Schiff, Vorfall) sichtbar ist.
+
+## Rollen und Berechtigungen
+
+Nicht alle Nutzerrollen dürfen alle Aktionen im Personenmodul durchführen. Die konkrete Rollenmatrix hängt von deiner Sentinel-Konfiguration ab, typischerweise gilt jedoch:
+
+<Tabs>
+  <Tab title="Leserolle" icon="info">
+
+  Nutzer mit Leserechten:
+
+  - Sehen Personenliste und Detailansichten.
+  - Nutzen Suche und Filterfunktionen.
+  - Dürfen **keine** Personendaten anlegen, ändern oder löschen.
+  - Dürfen Verknüpfungen nur lesen, nicht anpassen.
+
+  </Tab>
+
+  <Tab title="Analytik/Erfasser" icon="edit">
+
+  Nutzer mit erweiterten Rechten:
+
+  - Dürfen neue Personen anlegen und bestehende bearbeiten.
+  - Können Verknüpfungen zu Organisationen, Schiffen und Vorfällen erstellen und anpassen.
+  - Sehen mehr Felder (z. B. operative Einstufungen), sofern im Rollenmodell freigeschaltet.
+
+  </Tab>
+
+  <Tab title="Administrator" icon="shield">
+
+  Administratoren:
+
+  - Haben in der Regel Vollzugriff auf das Personenmodul.
+  - Können auch kritische Felder (z. B. Löschkennzeichen, Sperrvermerke) setzen.
+  - Verwalten im Hintergrund Rollen, Policies und technische Integrationen für das Personenmodul.
+
+  </Tab>
+</Tabs>
+
+<Callout kind="alert">
+
+Wenn du Felder nicht bearbeiten kannst oder Funktionen (zum Beispiel New person) fehlen, fehlen dir vermutlich Berechtigungen. Wende dich in diesem Fall an deine Administratoren oder das Sentinel-Projektteam.
+
+</Callout>
+
+## Technische Umsetzung für Entwickler
+
+Für Entwickler ist die Personen-Komponente über klar abgegrenzte Code-Bereiche und Datenquellen implementiert.
+
+### Relevante Code-Stellen
+
+Die wichtigsten Einstiegspunkte im Frontend sind:
+
+- **Seite**: `src/pages/PersonsPage.jsx`  
+  Verantwortlich für:
+  - Laden und Anzeigen der Personenliste.
+  - Such- und Filterlogik.
+  - Öffnen des Detailmodals und Weiterreichen der ausgewählten Person.
+
+- **Detailansicht / Modal**: `src/components/PersonDetailModal.jsx`  
+  Verantwortlich für:
+  - Formular für Stammdaten und verknüpfte Objekte.
+  - Validierung und Speichern von Eingaben.
+  - Darstellung und Bearbeitung von Verknüpfungen (Organisation, Schiff, Vorfall).
+
+Je nach Codebasis können weitere Komponenten beteiligt sein, zum Beispiel separate Komponenten für:
+
+- **PersonListTable**: Tabellen-Rendering und Sortierung.
+- **PersonRelationsPanel**: Darstellung von Organisationen, Schiffen und Vorfällen.
+- **Form-Snippets**: Wiederverwendbare Eingabefelder für Namen, Dokumente oder Bewertungen.
+
+### Datenanbindung über DataContext und Supabase
+
+Die Personen-Komponente greift auf Daten zu, die über einen gemeinsamen Kontext und Supabase bereitgestellt werden:
+
+- **DataContext** bündelt alle relevanten Datenoperationen für die Anwendung.
+- **Supabase** dient als Backend für Speicherung, Abfrage und Synchronisation der Personendaten.
+
+Typische Aufgaben im Kontext Personen:
+
+- **Lesen der Liste**: Abrufe der Tabelle mit Personen mitsamt Filtern, Sortierung und Paging.
+- **Lesen einzelner Datensätze**: Laden einer Person inklusive ihrer Verknüpfungen anhand einer ID.
+- **Schreiben**: Anlegen und Aktualisieren von Personendatensätzen sowie relationalen Links zu Organisationen, Schiffen und Vorfällen.
+
+<Callout kind="tip">
+
+Halte die Domänenlogik (z. B. Regeln zur Verknüpfung von Personen und Organisationen) im DataContext oder in dedizierten Servicemodulen und nicht direkt in der UI-Komponente. So bleiben `PersonsPage.jsx` und `PersonDetailModal.jsx` schlank und testbar.
+
+</Callout>
+
+### Typische Erweiterungspunkte
+
+Wenn du das Personenmodul anpassen oder erweitern willst, konzentriere dich auf folgende Stellen:
+
+- **Neue Felder im Formular**:
+  - Ergänze Eingabefelder in `PersonDetailModal.jsx`.
+  - Erweitere das Datenmodell und die Supabase-Schemas entsprechend.
+  - Aktualisiere `DataContext`, damit neue Felder korrekt gelesen und geschrieben werden.
+
+- **Zusätzliche Filter in der Liste**:
+  - Ergänze Filter-Controls in `src/pages/PersonsPage.jsx`.
+  - Binde die Filter an die entsprechenden Abfragen im `DataContext`.
+
+- **Neue Verknüpfungstypen**:
+  - Implementiere neue Relationen (z. B. zu Dokumenten oder externen Systemen) im `DataContext`.
+  - Ergänze UI-Komponenten im Detailmodal für Auswahl und Anzeige.
+
+## Nächste Schritte
+
+Wenn du tiefer einsteigen willst:
+
+<Columns cols={2}>
+  <Card
+    title="Anwenderhandbuch Sentinel"
+    href="/sentinel-anwender"
+    icon="users"
+    cta="Zu den Anwendungsflows"
+    horizontal="true"
+  >
+
+  Lerne, wie das Personenmodul in typische Sentinel-Workflows eingebettet ist.
+
+  </Card>
+
+  <Card
+    title="Entwicklerdokumentation Sentinel"
+    href="/sentinel-entwickler"
+    icon="code"
+    cta="Implementierungsdetails ansehen"
+    horizontal="true"
+  >
+
+  Erfahre mehr über DataContext, Supabase-Anbindung und Komponentenhierarchien.
+
+  </Card>
+</Columns>

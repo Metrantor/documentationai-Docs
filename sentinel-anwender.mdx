@@ -1,0 +1,545 @@
+---
+title: Sentinel Anwenderhandbuch
+description: Anleitung für Anwender der Sentinel Web-App: Anmeldung, Rollen, Arbeiten mit Personen, Organisationen, Schiffen, Vorfällen, Assessments, Hearings, Zeugenaussagen und Adminbereich.
+---
+
+## Überblick: Was ist Sentinel?
+
+Sentinel (Midnight Sentinels Investigation System) ist eine Web-Anwendung zur Verwaltung von Ermittlungen in der Midnight-Sentinels-Welt. Sie läuft im Browser als Einseitenanwendung und speichert Daten in einer Supabase-Datenbank.
+
+Mit Sentinel arbeitest du typischerweise an:
+
+- Personen und Verdächtigen
+- Organisationen und Gruppen
+- Schiffen und deren Bewegungen
+- Vorfällen und Ermittlungsakten
+- Assessments mit Gefahrenstufen und Einstufungen
+- Hearings und Zeugenaussagen
+- Benutzerkonten und Rollen (nur im Adminbereich)
+
+Die meisten Funktionen sind nur nach Anmeldung und abhängig von deiner Rolle sichtbar.
+
+<Callout kind="info">
+
+Einige Bereiche (zum Beispiel Admin, erweiterte Assessments) sind ausschließlich für höhergestellte Rollen wie Judges, High Judges und Sentinels freigeschaltet. Wenn du bestimmte Menüpunkte nicht siehst, fehlt dir vermutlich die entsprechende Rolle.
+
+</Callout>
+
+## Anmelden und abmelden
+
+Du erreichst Sentinel über die von deiner Organisation bereitgestellte URL im Browser. Die Anmeldung erfolgt über Demo- oder Produktivkonten, die im System hinterlegt sind.
+
+<Steps>
+  <Step title="Anmeldeseite öffnen" icon="monitor">
+
+  - Öffne den Browser und rufe die Sentinel-URL auf.
+  - Warte, bis die Startseite geladen ist; du solltest ein Login-Formular sehen.
+
+  </Step>
+
+  <Step title="Zugangsdaten eingeben" icon="lock">
+
+  - Trage deinen Benutzernamen oder deine E-Mail-Adresse im Feld für den Account ein.
+  - Gib dein Passwort in das Passwortfeld ein.
+  - Bestätige mit dem Login-Button.
+
+  </Step>
+
+  <Step title="Erfolgreiche Anmeldung prüfen" icon="check-circle">
+
+  - Nach erfolgreichem Login wirst du auf das Dashboard oder eine Übersicht weitergeleitet.
+  - In der Navigation solltest du nun Menüpunkte wie `Dashboard`, `Persons`, `Organizations`, `Ships`, `Incidents` und eventuell `Admin` sehen.
+
+  </Step>
+
+  <Step title="Abmelden" icon="x">
+
+  - Klicke in der Kopfzeile oder im Menü auf dein Profil bzw. den Logout-Button.
+  - Nach der Abmeldung kehrst du zur Login-Seite zurück.
+
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+
+Schlägt die Anmeldung wiederholt fehl, überprüfe Schreibweise und Groß-/Kleinschreibung deines Passworts. Wenn du weiterhin keinen Zugriff erhältst, wende dich an eine Person mit Admin-Rolle, damit sie deinen Account prüft oder ein neues Passwort vergibt.
+
+</Callout>
+
+## Rollen und Berechtigungen
+
+Deine Rolle bestimmt, welche Bereiche du siehst und welche Aktionen du ausführen darfst. Typische Rollen sind:
+
+- Citizen
+- Bounty Hunter
+- Judge
+- High Judge
+- Sentinel
+- Admin
+
+<Tabs>
+  <Tab title="Citizen" icon="users">
+
+  Citizens haben die geringsten Rechte. Sie können Datensätze lesen, aber nur eingeschränkt neue Einträge anlegen oder ändern.
+
+  - Fokus auf das Einsehen von öffentlichen oder ihnen zugewiesenen Fällen.
+  - Meist nur Leserechte in `Persons`, `Organizations`, `Ships` und `Incidents`.
+  - Kein Zugriff auf Adminfunktionen.
+
+  </Tab>
+
+  <Tab title="Bounty Hunter" icon="target">
+
+  Bounty Hunters arbeiten aktiv an Ermittlungen und Fahndungen.
+
+  - Häufig Schreibrechte für Personen, Vorfälle und ggf. Schiffe.
+  - Können Vorfälle aktualisieren, Notizen ergänzen und neue Fälle anlegen.
+  - Haben normalerweise keinen Zugriff auf Benutzerverwaltung im Adminbereich.
+
+  </Tab>
+
+  <Tab title="Judge" icon="gavel">
+
+  Judges verantworten Bewertungen und Entscheidungen.
+
+  - Können Assessments von Personen oder Vorfällen anlegen und anpassen.
+  - Dürfen Gefahrenstufen vergeben oder ändern, solange kein High Judge oder Sentinel diese überstimmt hat.
+  - Sehen oft mehr Details zu Hearings und Zeugenaussagen.
+
+  </Tab>
+
+  <Tab title="High Judge" icon="shield">
+
+  High Judges haben erweiterte Entscheidungsbefugnisse.
+
+  - Können Bewertungen von Judges übersteuern.
+  - Dürfen Gefahrenstufen endgültig festlegen, bis ein Sentinel eingreift.
+  - Haben typischerweise erweiterte Einsicht in alle Ermittlungsdaten.
+
+  </Tab>
+
+  <Tab title="Sentinel" icon="zap">
+
+  Sentinels sind die höchste operative Instanz im System.
+
+  - Können nahezu alle Datensätze lesen und schreiben.
+  - Dürfen Gefahrenstufen und Assessments so setzen, dass diese niedrigere Bewertungen übersteuern.
+  - Haben weitreichende Befugnisse bei Hearings und Zeugenbefragungen.
+
+  </Tab>
+
+  <Tab title="Admin" icon="settings">
+
+  Admins verwalten Benutzerkonten, Rollen und teilweise technische Einstellungen.
+
+  - Zugriff auf den Menüpunkt `Admin` mit Benutzer- und Rollenverwaltung.
+  - Können neue Benutzer anlegen, Rollen ändern, Accounts deaktivieren oder Passwörter setzen.
+  - Dürfen Rollenbilder hochladen, die im System für bestimmte Rollen angezeigt werden.
+
+  </Tab>
+</Tabs>
+
+<Callout kind="tip">
+
+Wenn du unsicher bist, welche Rolle du hast, schaue nach einem Hinweis in der Kopfzeile oder im Profilbereich. In vielen Installationen wird die aktive Rolle neben deinem Namen angezeigt.
+
+</Callout>
+
+## Navigation und Suche
+
+Nach dem Login siehst du meistens eine Navigationsleiste mit Einträgen wie:
+
+- `Dashboard`
+- `Persons`
+- `Organizations`
+- `Ships`
+- `Incidents`
+- `Assessments`
+- `Hearings`
+- `Admin` (nur für Admins)
+
+In den Listenansichten kannst du nach Einträgen suchen und filtern.
+
+### Einträge suchen
+
+<Steps>
+  <Step title="Zur passenden Liste wechseln" icon="folder">
+
+  - Wähle in der Navigation den Bereich, in dem du suchen willst, zum Beispiel `Persons` oder `Incidents`.
+  - Warte, bis die Tabelle geladen ist.
+
+  </Step>
+
+  <Step title="Suchfeld nutzen" icon="search">
+
+  - Gib im Suchfeld einen Namen, ein Kennzeichen, eine Organisationsbezeichnung oder andere Stichwörter ein.
+  - Die Liste aktualisiert sich und zeigt nur noch passende Treffer.
+
+  </Step>
+
+  <Step title="Details öffnen" icon="arrow-right">
+
+  - Klicke auf eine Zeile oder einen Detail-Button, um die Detailansicht eines Eintrags zu öffnen.
+  - Prüfe dort alle hinterlegten Informationen und, falls erlaubt, nimm Änderungen vor.
+
+  </Step>
+</Steps>
+
+## Personen, Organisationen und Schiffe verwalten
+
+Die Bereiche `Persons`, `Organizations` und `Ships` funktionieren in der Regel gleich: Du siehst eine Liste, kannst Einträge anlegen, bearbeiten und teilweise löschen, abhängig von deiner Rolle.
+
+### Neuen Personeneintrag anlegen
+
+<Steps>
+  <Step title="Personenliste öffnen" icon="users">
+
+  - Klicke in der Navigation auf `Persons`.
+  - Warte, bis die vorhandenen Einträge angezeigt werden.
+
+  </Step>
+
+  <Step title="Erfassungsmaske öffnen" icon="plus">
+
+  - Klicke auf den Button zum Anlegen einer neuen Person, zum Beispiel `New`, `Add Person` oder ein Plus-Symbol.
+  - Es öffnet sich ein Formular mit Feldern wie Name, Alias, Herkunft, Status und weiteren Angaben.
+
+  </Step>
+
+  <Step title="Daten eingeben" icon="edit">
+
+  - Trage alle relevanten Daten ein, etwa vollständiger Name, bekannte Aliasnamen, Zugehörigkeiten zu Organisationen oder bekannte Schiffe.
+  - Nutze, wenn vorhanden, Dropdowns oder Verknüpfungsfelder, um die Person mit bereits angelegten Organisationen oder Schiffen zu verbinden.
+
+  </Step>
+
+  <Step title="Speichern und prüfen" icon="check-circle">
+
+  - Speichere den Eintrag mit dem vorgesehenen Button.
+  - Prüfe nach dem Speichern, ob die Person korrekt in der Liste erscheint und alle relevanten Felder gefüllt sind.
+
+  </Step>
+</Steps>
+
+### Organisationen und Schiffe bearbeiten
+
+Für `Organizations` und `Ships` gelten sehr ähnliche Abläufe:
+
+- Nutze den jeweiligen Navigationspunkt.
+- Lege neue Einträge mit dem entsprechenden Button an.
+- Bearbeite bestehende Einträge über einen `Edit`-Button in der Zeile oder in der Detailansicht.
+- Verknüpfe Personen mit Organisationen oder Schiffen, wenn dies vorgesehen ist.
+
+<Callout kind="alert">
+
+Lösche Einträge nur, wenn du sicher bist, dass sie nicht mehr benötigt werden. Gelöschte Personen, Organisationen oder Schiffe können Verknüpfungen in Vorfällen oder Assessments verlieren.
+
+</Callout>
+
+## Vorfälle (Incidents) erfassen und verwalten
+
+Vorfälle sind zentrale Elemente der Ermittlungsarbeit. Ein Vorfall kann mit Personen, Organisationen, Schiffen und Assessments verknüpft sein.
+
+### Neuen Vorfall anlegen
+
+<Steps>
+  <Step title="Incident-Liste öffnen" icon="folder">
+
+  - Klicke in der Navigation auf `Incidents`.
+  - Überprüfe, ob bereits ähnliche Vorfälle existieren, um Doppelungen zu vermeiden.
+
+  </Step>
+
+  <Step title="Neuen Vorfall erstellen" icon="plus">
+
+  - Klicke auf `New Incident` oder den entsprechenden Button.
+  - Es öffnet sich ein Formular mit Feldern wie Titel, Beschreibung, Datum, Ort und Status.
+
+  </Step>
+
+  <Step title="Beteiligte verknüpfen" icon="users">
+
+  - Füge bekannte Beteiligte hinzu, zum Beispiel Personen, Organisationen oder Schiffe.
+  - Nutze Verknüpfungsfelder oder Auswahl-Listen, um bestehende Datensätze zuzuordnen.
+
+  </Step>
+
+  <Step title="Speichern und Assessment vorbereiten" icon="check-circle">
+
+  - Speichere den Vorfall.
+  - Wenn deine Rolle es erlaubt, lege direkt ein Assessment an oder plane ein Hearing, um weitere Informationen zu sammeln.
+
+  </Step>
+</Steps>
+
+## Assessments und Gefahrenstufen
+
+Assessments dienen dazu, Personen, Organisationen, Schiffe oder Vorfälle zu bewerten, etwa hinsichtlich Gefahrenstufe, Einstufung und aktuellem Status. Die App unterstützt hier eine hierarchische Logik: Entscheidungen können von höheren Rollen übersteuert werden.
+
+### Grundprinzip der Bewertungen
+
+- **Gefahrenstufe**: Einstufung, wie gefährlich eine Person, Organisation oder ein Vorfall eingeschätzt wird.
+- **Klassifikation**: Kategorisierung, z. B. Art der Bedrohung oder kriminelle Aktivität.
+- **Status**: Ob eine Bewertung vorläufig, geprüft oder endgültig ist.
+
+<Callout kind="info">
+
+Wenn eine Person von einem Judge bewertet wurde und später eine abweichende Einstufung von einem High Judge oder Sentinel erfolgt, setzt das System in der Regel die höhere Bewertung durch. So wird sichergestellt, dass Entscheidungen höherer Instanzen Priorität haben.
+
+</Callout>
+
+### Assessment anlegen oder bearbeiten
+
+<Steps>
+  <Step title="Zugehörigen Datensatz öffnen" icon="folder">
+
+  - Öffne die Detailansicht der Person, Organisation, des Schiffs oder Vorfalls, den du bewerten möchtest.
+  - Suche in der Detailansicht nach dem Bereich `Assessments` oder `Gefahrenstufe`.
+
+  </Step>
+
+  <Step title="Assessment öffnen" icon="edit">
+
+  - Klicke auf `Add Assessment`, `New Assessment` oder auf den Bearbeiten-Button bei einem vorhandenen Assessment.
+  - Das Formular zeigt Felder für Gefahrenstufe, Klassifikation, Status und eventuell Anmerkungen.
+
+  </Step>
+
+  <Step title="Werte festlegen" icon="zap">
+
+  - Wähle die passende Gefahrenstufe aus der Liste.
+  - Trage eine sinnvolle Klassifikation ein oder wähle sie, wenn sie als Dropdown angeboten wird.
+  - Setze den Status, zum Beispiel `preliminary`, `reviewed` oder `final`, entsprechend deiner Rolle und Reife der Informationen.
+
+  </Step>
+
+  <Step title="Speichern und Hierarchie beachten" icon="check-circle">
+
+  - Speichere das Assessment.
+  - Wenn später ein High Judge oder Sentinel eine abweichende Gefahrenstufe setzt, kann deine Bewertung automatisch überschrieben oder ergänzt werden.
+
+  </Step>
+</Steps>
+
+## Hearings und Zeugenaussagen (Witness Statements)
+
+Hearings sind formelle Anhörungen, in denen Aussagen gesammelt und bewertet werden. Zeugenaussagen können eigenständige Einträge oder Teil eines Hearings sein.
+
+### Hearing erstellen
+
+<Steps>
+  <Step title="Hearing-Bereich öffnen" icon="folder">
+
+  - Wechsle in der Navigation zu `Hearings` oder öffne ein Hearing über einen Vorfall, wenn es dort verlinkt ist.
+  - Prüfe, ob bereits ein passendes Hearing existiert, bevor du ein neues anlegst.
+
+  </Step>
+
+  <Step title="Neues Hearing anlegen" icon="plus">
+
+  - Klicke auf den Button zum Erstellen eines Hearings.
+  - Gib Titel, Datum, Ort und ggf. verantwortliche Rolle (Judge, High Judge, Sentinel) ein.
+
+  </Step>
+
+  <Step title="Teilnehmer und Vorfälle verknüpfen" icon="users">
+
+  - Füge beteiligte Personen und Organisationen hinzu.
+  - Verknüpfe das Hearing mit relevanten Vorfällen, damit der Zusammenhang klar bleibt.
+
+  </Step>
+
+  <Step title="Speichern und Statements vorbereiten" icon="check-circle">
+
+  - Speichere das Hearing.
+  - Füge anschließend Zeugenaussagen hinzu oder plane, zu einem späteren Zeitpunkt Zeugenaussagen zu erfassen.
+
+  </Step>
+</Steps>
+
+### Zeugenaussagen erfassen
+
+<Steps>
+  <Step title="Zeugenaussage hinzufügen" icon="edit">
+
+  - Öffne das gewünschte Hearing.
+  - Suche nach einem Bereich für `Witness Statements` oder `Zeugenaussagen` und klicke auf den Button zum Hinzufügen.
+
+  </Step>
+
+  <Step title="Details der Aussage dokumentieren" icon="pen">
+
+  - Trage den Namen der aussagenden Person und ihren Status (Zeuge, Beschuldigter, etc.) ein.
+  - Erfasse den Inhalt der Aussage möglichst genau, inklusive Datum und relevanter Details.
+
+  </Step>
+
+  <Step title="Bezüge zu Personen und Vorfällen setzen" icon="link">
+
+  - Verknüpfe die Zeugenaussage mit betroffenen Personen, Organisationen oder Vorfällen, falls das Formular diese Felder anbietet.
+  - So bleibt nachvollziehbar, auf welchen Teil der Ermittlungen sich die Aussage bezieht.
+
+  </Step>
+
+  <Step title="Speichern und prüfen" icon="check-circle">
+
+  - Speichere den Eintrag.
+  - Überprüfe, ob die Zeugenaussage im Hearing korrekt angezeigt und mit den richtigen Datensätzen verknüpft ist.
+
+  </Step>
+</Steps>
+
+## Adminbereich: Benutzerverwaltung und Rollenbilder
+
+Der Adminbereich steht nur Accounts mit Admin-Rolle zur Verfügung. Hier verwaltest du Benutzer, Rollen, Aktivitätsstatus und Rollenbilder.
+
+<Callout kind="alert">
+
+Verändere im Adminbereich nur Einstellungen, deren Auswirkungen du verstehst. Falsche Rollen oder deaktivierte Konten können dazu führen, dass Teammitglieder nicht mehr auf wichtige Ermittlungsdaten zugreifen können.
+
+</Callout>
+
+### Benutzerkonten verwalten
+
+<Steps>
+  <Step title="Adminseite öffnen" icon="settings">
+
+  - Klicke in der Navigation auf `Admin`.
+  - Wähle dort den Bereich `Users` oder `Benutzer`.
+
+  </Step>
+
+  <Step title="Bestehende Benutzer prüfen" icon="users">
+
+  - Überfliege die Liste der Benutzer mit Spalten wie Name, E-Mail, Rolle, aktiv/inaktiv.
+  - Nutze ggf. Filter oder Suche, um einen bestimmten Benutzer zu finden.
+
+  </Step>
+
+  <Step title="Neuen Benutzer anlegen" icon="plus">
+
+  - Klicke auf `Add User` oder den entsprechenden Button.
+  - Trage Name, E-Mail und initiale Rolle ein.
+  - Lege ein Startpasswort fest oder nutze den vorgesehenen Mechanismus, um Zugangsdaten zu verteilen.
+
+  </Step>
+
+  <Step title="Rollen und Aktivstatus ändern" icon="edit">
+
+  - Öffne einen Benutzer per Klick auf die Zeile oder einen `Edit`-Button.
+  - Ändere Rolle und Aktivstatus über Dropdown oder Schalter.
+  - Speichere nach der Anpassung und informiere die betroffene Person bei Rollenwechsel oder Deaktivierung.
+
+  </Step>
+</Steps>
+
+### Rollenbilder hochladen
+
+Rollenbilder sind Grafiken, die bestimmten Rollen zugeordnet werden und im Interface auftauchen können (zum Beispiel bei Profilen oder in Übersichten).
+
+<Steps>
+  <Step title="Bereich für Rollenbilder öffnen" icon="image">
+
+  - Gehe im Adminbereich zum Abschnitt `Role Images`, `Rollenbilder` oder einem ähnlich benannten Menüpunkt.
+  - Prüfe, ob bereits Bilder vorhandenen Rollen zugeordnet sind.
+
+  </Step>
+
+  <Step title="Passendes Bild auswählen" icon="upload">
+
+  - Klicke auf den Button zum Hochladen, zum Beispiel `Upload Image`.
+  - Wähle auf deinem Gerät eine geeignete Bilddatei aus (idealerweise im vorgegebenen Format und mit passender Auflösung).
+
+  </Step>
+
+  <Step title="Bild einer Rolle zuordnen" icon="link">
+
+  - Ordne das hochgeladene Bild einer Rolle zu, etwa `Bounty Hunter`, `Judge` oder `Sentinel`.
+  - Speichere die Zuordnung, damit die Änderung im System aktiv wird.
+
+  </Step>
+
+  <Step title="Ergebnis kontrollieren" icon="check-circle">
+
+  - Wechsle auf ein Profil oder eine Stelle in der App, an der das Rollenbild erscheinen soll.
+  - Bestätige, dass das neue Bild korrekt angezeigt wird.
+
+  </Step>
+</Steps>
+
+## Häufige Probleme: Datenbank nicht eingerichtet / Tabellen fehlen
+
+Sentinel verwendet Supabase als Datenbank. Wenn Tabellen noch nicht angelegt wurden oder fehlen, zeigt die App einen speziellen Hinweis oder eine Statusansicht an (zum Beispiel `DatabaseStatus` oder einen `DatabaseSetupHelper`).
+
+Du erkennst dieses Problem daran, dass:
+
+- anstelle von Listen und Daten eine Hinweismeldung zur Datenbank erscheint,
+- oder du Fehlermeldungen siehst, die darauf hindeuten, dass Tabellen nicht existieren.
+
+### Was du als Anwender tun kannst
+
+<Callout kind="info">
+
+Normale Anwender (Citizen, Bounty Hunter, Judge, High Judge, Sentinel) richten die Datenbank nicht selbst ein. Die Einrichtung erfolgt durch Admins oder Entwickler, meistens über ein Skript wie `database-setup.sql` im Supabase SQL-Editor.
+
+</Callout>
+
+<Steps>
+  <Step title="Hinweis in der Oberfläche lesen" icon="info">
+
+  - Lies die angezeigte Meldung aufmerksam durch.
+  - Häufig steht dort, dass Tabellen fehlen oder die Datenbank initialisiert werden muss.
+
+  </Step>
+
+  <Step title="Prüfen, ob ein Setup-Button vorhanden ist" icon="play-circle">
+
+  - Manche Installationen bieten im `DatabaseSetupHelper` einen Button zum Anlegen der Tabellen.
+  - Wenn du die Berechtigung hast und dir dies angewiesen wurde, klicke auf diesen Button und warte, bis der Vorgang abgeschlossen ist.
+
+  </Step>
+
+  <Step title="Admin oder Entwickler informieren" icon="alert-triangle">
+
+  - Wenn kein Setup-Button vorhanden ist oder der Vorgang fehlschlägt, kontaktiere den zuständigen Admin oder Entwickler.
+  - Teile ihnen den genauen Wortlaut der Fehlermeldung mit und erwähne, dass eventuell das SQL-Skript zum Erstellen der Tabellen im Supabase SQL-Editor ausgeführt werden muss.
+
+  </Step>
+
+  <Step title="Nach erfolgreicher Einrichtung neu laden" icon="refresh-cw">
+
+  - Sobald die Datenbank eingerichtet wurde, lade die Seite neu oder melde dich kurz ab und wieder an.
+  - Überprüfe, ob die Listen (`Persons`, `Organizations`, `Ships`, `Incidents`) nun korrekt angezeigt werden.
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+
+Wenn du im Feld-Einsatz bist und die Datenbank nicht erreichbar ist, dokumentiere kritische Informationen vorübergehend offline, zum Beispiel in einem gesicherten Notizsystem, und trage sie nach, sobald Sentinel wieder verfügbar ist.
+
+</Callout>
+
+## Nächste Schritte
+
+Wenn du mit den Grundlagen vertraut bist, kannst du deine Arbeit in Sentinel weiter vertiefen:
+
+<Columns cols={3}>
+  <Card title="Mit Fällen arbeiten" href="quickstart" icon="folder" cta="Zu den Grundlagen">
+
+  Erfahre, wie du Arbeitsabläufe straffst, indem du konsequent mit Vorfällen, Personen und Organisationen arbeitest.
+
+  </Card>
+
+  <Card title="Rollen verstehen" href="concepts" icon="users" cta="Mehr zu Rollen und Konzepten">
+
+  Vertiefe dein Verständnis der Rollen und wie sie Entscheidungsprozesse und Assessments beeinflussen.
+
+  </Card>
+
+  <Card title="Hilfe und Support" href="help-center" icon="help-circle" cta="Zum Help Center">
+
+  Finde Antworten auf häufige Fragen und Hinweise zur Fehlerbehebung rund um deine Sentinel-Installation.
+
+  </Card>
+</Columns>

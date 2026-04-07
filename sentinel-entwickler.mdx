@@ -1,0 +1,540 @@
+---
+title: Sentinel Entwicklerdokumentation
+description: Technische Übersicht und Anleitungen für Entwicklung, Betrieb und Erweiterung der Sentinel React-App mit Supabase-Backend und Netlify-Deployment.
+---
+
+## Überblick und Zielgruppe
+
+Sentinel ist eine React-Single-Page-Application (SPA) auf Basis von Vite und Tailwind mit einem Supabase-Backend für Datenhaltung und Authentifizierung. Diese Dokumentation richtet sich an Entwicklerinnen und Entwickler, die das System lokal betreiben, deployen oder funktional erweitern.
+
+Du erfährst, wie du die lokale Umgebung einrichtest, Supabase konfigurierst, die Architektur verstehst und neue Seiten beziehungsweise Features sauber in Routing und Datenkontext integrierst.
+
+## Voraussetzungen
+
+<Callout kind="info">
+
+Für Entwicklung und Deployment von Sentinel benötigst du:
+
+- Node.js 18.x (orientiere dich an der `.nvmrc` im Repo)
+- npm ab Version 9
+- Zugriff auf ein Supabase-Projekt (URL und Anon Key)
+- Netlify-Account, falls du selbst deployen möchtest
+
+</Callout>
+
+## Lokale Entwicklungsumgebung
+
+Dieser Abschnitt beschreibt die Standard-Workflows zum Installieren, Starten, Bauen und Linten der Anwendung.
+
+### Abhängigkeiten installieren
+
+<Steps>
+  <Step title="Repository klonen" icon="download">
+
+```bash
+git clone git@github.com:dein-org/sentinel.git
+cd sentinel
+```
+
+  </Step>
+
+  <Step title="Node-Version setzen" icon="terminal">
+
+Wenn du `nvm` verwendest, setze die Node-Version aus der `.nvmrc`:
+
+<CodeGroup tabs="bash">
+
+```bash
+nvm use
+```
+
+</CodeGroup>
+
+Erfolgskriterium: `node -v` gibt eine Version 18.x aus.
+
+  </Step>
+
+  <Step title="Abhängigkeiten installieren" icon="package">
+
+<CodeGroup tabs="bash">
+
+```bash
+npm install
+```
+
+</CodeGroup>
+
+Erfolgskriterium: Installation läuft ohne Fehler durch und erzeugt einen `node_modules`-Ordner.
+
+  </Step>
+</Steps>
+
+### Entwicklungsserver starten
+
+Der Entwicklungsserver läuft mit Vite und ist per Default auf Port 3000 gebunden.
+
+<Steps>
+  <Step title="Dev-Server starten" icon="play-circle">
+
+<CodeGroup tabs="bash">
+
+```bash
+npm run dev
+```
+
+</CodeGroup>
+
+Vite startet den Server typischerweise unter `http://localhost:3000`. Die App ist als SPA konfiguriert, sodass Client-Side-Routing funktioniert.
+
+  </Step>
+
+  <Step title="Serverrelais konfigurieren (optional)" icon="settings">
+
+Der Dev-Server wird mit `--host 0.0.0.0` gestartet. Wenn du den Server im Netzwerk teilen willst, achte auf deine Firewall-Einstellungen.
+
+  </Step>
+</Steps>
+
+### Build und Preview
+
+Nutze die bestehenden npm-Skripte, um einen Produktionsbuild zu erzeugen und lokal zu testen.
+
+<Steps>
+  <Step title="Produktionsbuild erstellen" icon="code">
+
+<CodeGroup tabs="bash">
+
+```bash
+npm run build
+```
+
+</CodeGroup>
+
+Erfolgskriterium: Vite erzeugt ein `dist`-Verzeichnis ohne Fehler.
+
+  </Step>
+
+  <Step title="Produktionsbuild lokal previewen" icon="monitor">
+
+<CodeGroup tabs="bash">
+
+```bash
+npm run preview
+```
+
+</CodeGroup>
+
+Erfolgskriterium: Die App läuft aus dem `dist`-Build heraus und verhält sich wie in Produktion.
+
+  </Step>
+</Steps>
+
+### Linting
+
+Der Code wird mit ESLint geprüft.
+
+<Steps>
+  <Step title="Lint-Check ausführen" icon="check-circle">
+
+<CodeGroup tabs="bash">
+
+```bash
+npm run lint
+```
+
+</CodeGroup>
+
+Behebe gemeldete Probleme, bevor du größere Änderungen mergst oder produktiv deployst.
+
+  </Step>
+</Steps>
+
+## Supabase-Anbindung und Datenbank
+
+Die Anwendung nutzt Supabase als Backend. Dieser Abschnitt beschreibt, wo die Supabase-Konfiguration liegt, wie du die Datenbankstruktur anlegst und was passiert, wenn Tabellen fehlen.
+
+### Supabase-Client konfigurieren
+
+Der Supabase-Client ist in `src/lib/supabase.js` definiert.
+
+<CodeGroup tabs="JavaScript">
+
+```javascript
+// src/lib/supabase.js
+import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = "https://dein-supabase-projekt.supabase.co";
+const SUPABASE_ANON_KEY = "dein-anon-key";
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error("Supabase-Konfiguration fehlt");
+}
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+```
+
+</CodeGroup>
+
+<Callout kind="alert">
+
+Aktuell sind Supabase-URL und Anon Key im Code hart codiert. Setze im produktiven Betrieb unbedingt Umgebungsvariablen und **kommitte keine echten Schlüssel** ins Repository. Erstelle dafür z. B. eine `.env`-Datei und nutze das Vite-ENV-Muster (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
+
+</Callout>
+
+### Datenbank-Schema anlegen
+
+Das Repository enthält eine Datei `database-setup.sql`, die alle benötigten Tabellen, Indizes und RLS-Policies erstellt. Typische Tabellen sind:
+
+- `hearings_ms2024`
+- `witness_statements_ms2024`
+- `role_images_ms2024`
+
+<Steps>
+  <Step title="SQL im Supabase-SQL-Editor ausführen" icon="database">
+
+1. Öffne dein Supabase-Projekt.
+2. Navigiere zum SQL-Editor.
+3. Kopiere den Inhalt von `database-setup.sql` aus dem Repo.
+4. Führe das Skript aus.
+
+Erfolgskriterium: Alle im Skript definierten Tabellen existieren anschließend und RLS-Policies sind aktiv.
+
+  </Step>
+
+  <Step title="RLS und Policies prüfen" icon="shield">
+
+Die App verlässt sich auf die in `database-setup.sql` angelegten Row-Level-Security-Regeln. Prüfe im Supabase-Dashboard unter **Authentication** und **Policies**, ob die Rollen und Policies mit deinen erwarteten Rollen übereinstimmen.
+
+  </Step>
+</Steps>
+
+<Callout kind="tip">
+
+Wenn du das Schema änderst (neue Spalten, Tabellen oder Policies), synchronisiere die Logik in den React-Komponenten und im `AuthContext` beziehungsweise `DataContext`, damit alle Rollen weiterhin korrekt lesen und schreiben können.
+
+</Callout>
+
+### Verhalten bei fehlenden Tabellen
+
+Die App enthält Komponenten wie `DatabaseStatus` und `DatabaseSetupHelper` sowie Hilfsskripte wie `createDatabaseTables.js`, um den Status der Datenbank zu prüfen und dir initiale Einrichtungsschritte anzuzeigen.
+
+Typisches Verhalten:
+
+- Beim Start versucht die App, auf Kern-Tabellen zuzugreifen.
+- Fehlende Tabellen werden erkannt und im UI als Setup-Hinweis angezeigt.
+- Du kannst dann `database-setup.sql` ausführen oder das Helper-Skript verwenden, um die Tabellen zu erstellen.
+
+Nutze dieses Verhalten in der Entwicklung, um zu validieren, dass dein Supabase-Projekt korrekt konfiguriert ist.
+
+## Architekturüberblick
+
+Dieser Abschnitt beschreibt die wichtigsten Strukturen im Frontend-Code und das Berechtigungsmodell.
+
+### Projektstruktur und zentrale Dateien
+
+Wesentliche Teile der App:
+
+- `src/App.jsx` – definiert das Routing und integriert `ProtectedRoute`, `AuthProvider` und `DataProvider`.
+- `src/context/AuthContext.jsx` (oder ähnlich) – kapselt Authentifizierung, Rollen und Demo-User.
+- `src/context/DataContext.jsx` (oder ähnlich) – stellt datenbezogene Hooks und State bereit.
+- `src/lib/supabase.js` – Supabase-Client, der in Contexts und Seiten genutzt wird.
+- `src/pages/...` – Seitenkomponenten, die im Routing registriert sind.
+- `src/components/...` – wiederverwendbare UI-Bausteine.
+
+<CodeGroup tabs="React">
+
+```jsx
+// src/App.jsx (verkürzt)
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { DataProvider } from "./context/DataContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardPage from "./pages/DashboardPage";
+
+export function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <DataProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            {/* weitere Routen */}
+          </Routes>
+        </DataProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
+}
+```
+
+</CodeGroup>
+
+Diese Struktur stellt sicher, dass Authentifizierung und Datenkontext für alle geschützten Routen verfügbar sind.
+
+### Authentifizierung und Rollenmodell
+
+Der `AuthContext` definiert:
+
+- verfügbare Rollen (z. B. Ermittler, Admin, Beobachter)
+- Demo-Benutzer für lokale Tests
+- Login-/Logout-Logik
+- aktuelle Benutzerinformationen, einschließlich Rolle
+
+`ProtectedRoute` nutzt den `AuthContext`, um:
+
+- unautorisierte Nutzer umzuleiten (z. B. auf eine Login-Seite)
+- optionale Rollenanforderungen durchzusetzen (`requiredRoles`-Prop o. Ä.)
+
+Die Seite `UserManagementPage` bietet Admin-Funktionen wie:
+
+- Verwaltung von Demo-Usern
+- Rollenwechsel und ggf. Rechte-Tests
+
+<Callout kind="info">
+
+Rollen und Berechtigungen müssen mit den Supabase-RLS-Policies übereinstimmen. Wenn du neue Rollen einführst, erweitere sowohl den `AuthContext` als auch die RLS-Definitionen in Supabase synchron.
+
+</Callout>
+
+### Datenkontext und Datenzugriff
+
+Der `DataProvider` stellt reaktive Hooks und Funktionen für Datenzugriff bereit, z. B.:
+
+- Laden von Ermittlungsakten, Anhörungen oder Zeugenaussagen
+- Schreiben oder Aktualisieren von Datensätzen über den Supabase-Client
+- Caching und Laden-States für UI-Komponenten
+
+Typisches Muster im Datenkontext:
+
+<CodeGroup tabs="React">
+
+```jsx
+// src/context/DataContext.jsx (vereinfacht)
+import { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+
+const DataContext = createContext(null);
+
+export function DataProvider({ children }) {
+  const [hearings, setHearings] = useState([]);
+
+  useEffect(() => {
+    supabase
+      .from("hearings_ms2024")
+      .select("*")
+      .then(({ data, error }) => {
+        if (!error) setHearings(data ?? []);
+      });
+  }, []);
+
+  return (
+    <DataContext.Provider value={{ hearings }}>
+      {children}
+    </DataContext.Provider>
+  );
+}
+
+export function useData() {
+  return useContext(DataContext);
+}
+```
+
+</CodeGroup>
+
+Seiten greifen über Hooks wie `useData()` auf diese Werte zu, ohne direkt Supabase-Aufrufe einzubetten. Das vereinfacht spätere Schemaänderungen und zentrale Fehlerbehandlung.
+
+## Deployment auf Netlify
+
+Sentinel ist für Deployment auf Netlify vorbereitet. Die zentrale Konfiguration liegt in `netlify.toml`.
+
+### Netlify-Build-Konfiguration
+
+Typische Einträge in `netlify.toml`:
+
+- Build-Befehl: `npm run build`
+- Publish-Verzeichnis: `dist`
+- SPA-Redirect: `/*` auf `/index.html` (wichtig für React-Routing)
+- optionale Headerkonfiguration
+
+<Steps>
+  <Step title="Netlify-Site anlegen" icon="rocket">
+
+1. Erstelle im Netlify-Dashboard eine neue Site aus dem Git-Repository.
+2. Wähle den Branch, den du deployen möchtest.
+
+  </Step>
+
+  <Step title="Build-Einstellungen prüfen" icon="settings">
+
+Stelle sicher, dass folgende Werte in Netlify gesetzt sind:
+
+- **Build command:** `npm run build`
+- **Publish directory:** `dist`
+
+Diese Werte sollten mit `netlify.toml` übereinstimmen.
+
+  </Step>
+
+  <Step title="SPA-Redirect sicherstellen" icon="chevron-right">
+
+Die Datei `netlify.toml` enthält eine Redirect-Regel, die alle Pfade auf `index.html` leitet, z. B.:
+
+<CodeGroup tabs="TOML">
+
+```toml
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+```
+
+</CodeGroup>
+
+Diese Regel stellt sicher, dass Client-Side-Routing auch bei direktem Aufruf von Deep-Links funktioniert.
+
+  </Step>
+
+  <Step title="Deployment auslösen" icon="upload">
+
+Netlify startet nach Push auf den konfigurierten Branch automatisch einen Build. Prüfe das Deploy-Log im Netlify-Dashboard auf Fehler.
+
+Erfolgskriterium: Die Site ist über die Netlify-URL erreichbar und alle Routen funktionieren.
+
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+
+Hinterlege Supabase-URL und Anon Key nicht direkt im Repository, sondern als Netlify-Environment-Variablen. Nutze dann Vite-Env-Variablen (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) im Supabase-Client.
+
+</Callout>
+
+## Neue Seite oder neues Feature hinzufügen
+
+Dieser Abschnitt zeigt das Standardmuster, wie du eine neue Seite inklusive Routing und DataContext-Anbindung ergänzt.
+
+### 1. Routenkomponente anlegen
+
+Lege unter `src/pages` eine neue Datei an, z. B. `src/pages/CaseOverviewPage.jsx`:
+
+<CodeGroup tabs="React">
+
+```jsx
+// src/pages/CaseOverviewPage.jsx
+import { useData } from "../context/DataContext";
+
+export default function CaseOverviewPage() {
+  const { hearings } = useData();
+
+  return (
+    <main className="p-6">
+      <h1 className="text-2xl font-semibold mb-4">Fallübersicht</h1>
+      <ul className="space-y-2">
+        {hearings.map((hearing) => (
+          <li key={hearing.id} className="border rounded p-3">
+            <div className="font-medium">{hearing.title}</div>
+            <div className="text-sm text-gray-500">
+              {hearing.date} · {hearing.location}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </main>
+  );
+}
+```
+
+</CodeGroup>
+
+### 2. Route in `App.jsx` registrieren
+
+Erweitere die Routen in `src/App.jsx`:
+
+<CodeGroup tabs="React">
+
+```jsx
+// src/App.jsx (Ausschnitt)
+import CaseOverviewPage from "./pages/CaseOverviewPage";
+
+<Route
+  path="/cases"
+  element={
+    <ProtectedRoute requiredRoles={["investigator", "admin"]}>
+      <CaseOverviewPage />
+    </ProtectedRoute>
+  }
+/>
+```
+
+</CodeGroup>
+
+Damit ist die Seite unter `/cases` erreichbar und nur für ausgewählte Rollen sichtbar.
+
+### 3. DataContext erweitern (falls neues Datenmodell)
+
+Wenn dein Feature neue Tabellen oder Felder nutzt, ergänze `DataContext`:
+
+<CodeGroup tabs="React">
+
+```jsx
+// src/context/DataContext.jsx (zusätzliche Daten)
+const [witnessStatements, setWitnessStatements] = useState([]);
+
+useEffect(() => {
+  supabase
+    .from("witness_statements_ms2024")
+    .select("*")
+    .then(({ data, error }) => {
+      if (!error) setWitnessStatements(data ?? []);
+    });
+}, []);
+```
+
+</CodeGroup>
+
+Exportiere die neuen Werte im Context:
+
+<CodeGroup tabs="React">
+
+```jsx
+// im Return von DataProvider
+<DataContext.Provider value={{ hearings, witnessStatements }}>
+  {children}
+</DataContext.Provider>
+```
+
+</CodeGroup>
+
+Und nutze sie in der neuen Seite über `useData()`.
+
+### 4. Rollen und Policies prüfen
+
+Wenn neue Features sensible Daten betreffen:
+
+- Ergänze das Rollenmodell im `AuthContext` (z. B. neue Rolle oder zusätzliche Berechtigungen).
+- Passe Supabase-RLS-Policies für die betroffenen Tabellen an.
+- Teste als jede relevante Rolle (z. B. über Demo-User), ob das Feature wie erwartet zugreift oder blockiert.
+
+<Callout kind="tip">
+
+Halte dich an das bestehende Muster: **keine Direktzugriffe auf Supabase in Seiten**, sondern Zugriff über `DataContext` oder dedizierte Hooks. So bleiben Aufrufe und Berechtigungen zentral wartbar.
+
+</Callout>
+
+## Weiterführende Wartungsaufgaben
+
+Für langfristige Wartung der Sentinel-App:
+
+- Aktualisiere Abhängigkeiten regelmäßig (z. B. `npm outdated`, `npm update`).
+- Passe ESLint-Regeln an dein Team an und halte den Code lint-frei.
+- Dokumentiere Schemaänderungen zusätzlich in `database-setup.sql` oder in separaten Migrationsskripten.
+- Nutze Feature-Flags oder Konfigurationsobjekte im `DataContext` für experimentelle Features, statt hartverdrahteter Bedingungen über die gesamte App.
+
+Plane größere Architekturänderungen (z. B. Aufteilung von Contexts, Einführung von Server-Komponenten oder API-Layern) so, dass bestehende Seiten weiterhin über das bekannte Routing- und Kontextmuster funktionieren.

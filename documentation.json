@@ -48,13 +48,7 @@
                 "title": "Entwicklerdokumentation",
                 "path": "sentinel-entwickler",
                 "icon": "code"
-              }
-            ]
-          },
-          {
-            "group": "Components",
-            "icon": "layers",
-            "pages": [
+              },
               {
                 "group": "Anwendungskomponenten",
                 "icon": "app-window",
@@ -101,7 +95,13 @@
                     "path": "components/anwendungskomponenten/vorfaelle-incidents"
                   }
                 ]
-              },
+              }
+            ]
+          },
+          {
+            "group": "Components",
+            "icon": "layers",
+            "pages": [
               {
                 "title": "Images",
                 "path": "components/images",
